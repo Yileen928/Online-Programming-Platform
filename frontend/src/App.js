@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
+import ProjectManagement from './components/ProjectManagement';
+import DatasetManagement from './components/DatasetManagement';
 import { useEffect, useState } from 'react';
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/projects" element={<ProjectManagement />} />
+        <Route path="/datasets" element={<DatasetManagement />} />
       </Routes>
     </Router>
   );

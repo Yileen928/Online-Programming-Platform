@@ -14,32 +14,11 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   config => {
-    // 开发环境返回模拟数据
+    // 开发环境返回空数组
     if (process.env.NODE_ENV === 'development') {
-      if (config.url === '/api/user/recent-projects') {
+      if (config.url === '/api/datasets') {
         return Promise.resolve({
-          data: {
-            data: [
-              {
-                id: 1,
-                title: '圆周计算',
-                description: '计算圆周率的项目',
-                lastModified: '35分钟前'
-              },
-              {
-                id: 2,
-                title: '排序算法',
-                description: '实现各种排序算法',
-                lastModified: '1小时前'
-              },
-              {
-                id: 3,
-                title: '数据结构',
-                description: '基础数据结构实现',
-                lastModified: '3天前'
-              }
-            ]
-          }
+          data: []
         });
       }
     }

@@ -19,5 +19,20 @@ export const userApi = {
   // 获取用户最近的项目
   getRecentProjects: () => {
     return request.get('/api/user/recent-projects');
+  },
+
+  // 获取个人项目列表
+  getPersonalProjects: () => {
+    return request.get('/api/projects/personal');
+  },
+
+  // 获取团队项目列表
+  getTeamProjects: () => {
+    return request.get('/api/projects/team');
+  },
+
+  // 获取数据集列表
+  getDatasets: () => {
+    return request.get('/api/datasets');
   }
 };
