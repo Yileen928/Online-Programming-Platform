@@ -1,0 +1,78 @@
+.project-management-layout {
+  min-height: 100vh;
+}
+
+.project-management-header {
+  background: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+}
+
+.project-management-content {
+  margin: 24px;
+  padding: 24px;
+  background: #fff;
+}
+
+.project-section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.section-search {
+  width: 300px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.project-card h4 {
+  margin: 8px 0;
+}
+
+.project-time {
+  color: #666;
+  font-size: 12px;
+  display: block;
+  margin-top: 8px;
+}
+
+.loading-projects {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.no-projects {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  background: #f5f5f5;
+  border-radius: 4px;
+} 
