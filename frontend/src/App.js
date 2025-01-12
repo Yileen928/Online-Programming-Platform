@@ -1,31 +1,42 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
-import UserProfile from './components/UserProfile';
-import { useEffect, useState } from 'react';
+// import Register from './components/Register';
+import ForgotPassword from './components/ForgotPassword';
+import Projects from './components/Projects';
+import ProjectManagement from './components/ProjectManagement';
+import DatasetManagement from './components/DatasetManagement';
+import { ConfigProvider } from 'antd';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // 开发阶段：设置一个假的 token
-    if (process.env.NODE_ENV === 'development') {
-      localStorage.setItem('token', 'fake-token-for-development');
-    }
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
-  }, []);
-
   return (
-    <Router>
-      <Routes>
-        {/* 开发阶段直接渲染 Home 组件 */}
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<UserProfile />} />
-      </Routes>
-    </Router>
+    <ConfigProvider
+      getPopupContainer={node => {
+        if (node) {
+          return node.parentNode;
+        }
+        return document.body;
+      }}
+    >
+      <Router future={{ 
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          {/* <Route path="/register" element={<Register />} /> */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects" element={<ProjectManagement />} />
+          <Route path="/datasets" element={<DatasetManagement />} />
+          <Route path="/teams" element={<div>团队管理页面</div>} />
+          <Route path="/discussions" element={<div>讨论页面</div>} />
+          <Route path="/settings" element={<div>设置页面</div>} />
+        </Routes>
+      </Router>
+    </ConfigProvider>
   );
 }
 
