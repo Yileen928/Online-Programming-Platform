@@ -4,6 +4,8 @@ import Home from './components/Home';
 import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Projects from './components/Projects';
+import ProjectManagement from './components/ProjectManagement';
+import DatasetManagement from './components/DatasetManagement';
 
 function App() {
   return (
@@ -18,6 +20,11 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/projects" element={<ProjectManagement />} />
+        <Route path="/datasets" element={<DatasetManagement />} />
+        <Route path="/teams" element={<div>团队管理页面</div>} />
+        <Route path="/discussions" element={<div>讨论页面</div>} />
+        <Route path="/settings" element={<div>设置页面</div>} />
       </Routes>
     </Router>
   );
