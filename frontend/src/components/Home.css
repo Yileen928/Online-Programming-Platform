@@ -105,6 +105,8 @@
 .project-time {
   color: #666;
   font-size: 12px;
+  display: block;
+  margin-top: 8px;
 }
 
 .loading-projects {
@@ -119,7 +121,7 @@
   text-align: center;
   padding: 20px;
   color: #666;
-  background: #f5f5f5;
+  background: #2a2a2a;
   border-radius: 4px;
 }
 

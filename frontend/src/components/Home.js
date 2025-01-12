@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Input, Select, Radio, Button, Tabs, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import SideBar from './home/SideBar';
 import './Home.css';
+import { userApi } from '../api/user';
 
 const { Header, Content } = Layout;
 const { Search } = Input;
@@ -13,6 +14,8 @@ const Home = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [projectName, setProjectName] = useState('');
   const [isPublic, setIsPublic] = useState(true);
+  const [recentProjects, setRecentProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const templates = [
     { key: 'python', label: 'Python' },
@@ -20,12 +23,21 @@ const Home = () => {
     { key: 'java', label: 'Java' }
   ];
 
-  const recentProjects = [
-    { id: 1, title: '圆周计算', description: '项目描述' },
-    { id: 2, title: '圆周计算', description: '项目描述' },
-    { id: 3, title: '圆周计算', description: '项目描述' },
-    { id: 4, title: '圆周计算', description: '项目描述' }
-  ];
+  useEffect(() => {
+    const fetchRecentProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await userApi.getRecentProjects();
+        setRecentProjects(response || []);
+      } catch (error) {
+        console.error('获取最近项目失败:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentProjects();
+  }, []);
 
   return (
     <Layout className="home-layout dark">
@@ -104,19 +116,27 @@ const Home = () => {
           <div className="recent-projects-container">
             <h3>最近的项目</h3>
             <div className="recent-projects-grid">
-              {recentProjects.map(project => (
-                <Card 
-                  key={project.id}
-                  className="recent-project-card"
-                  bordered={false}
-                >
-                  <div className="project-icon">—</div>
-                  <div className="project-info">
-                    <h4>{project.title}</h4>
-                    <p>{project.description}</p>
-                  </div>
-                </Card>
-              ))}
+              {loading ? (
+                <div className="loading-projects">加载中...</div>
+              ) : recentProjects.length > 0 ? (
+                recentProjects.map(project => (
+                  <Card 
+                    key={project.id}
+                    className="recent-project-card"
+                    bordered={false}
+                    onClick={() => navigate(`/project/${project.id}`)}
+                  >
+                    <div className="project-icon">—</div>
+                    <div className="project-info">
+                      <h4>{project.title}</h4>
+                      <p>{project.description}</p>
+                      <span className="project-time">{project.lastModified}</span>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <div className="no-projects">暂无最近项目</div>
+              )}
             </div>
           </div>
         </Content>
