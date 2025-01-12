@@ -93,7 +93,7 @@ const Login = () => {
         {/* 注册和忘记密码链接 */}
         <Form.Item {...tailLayout}>
           <div className="login-links">
-            <Link to="/register">注册新账号</Link>
+            {/* <Link to="/register">注册新账号</Link> */}
             <Link to="/forgot-password">忘记密码？</Link>
           </div>
         </Form.Item>
