@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Input, Card, Select, Radio, Button, message } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Input, Select, Radio, Button, Tabs, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { userApi } from '../api/user';
 import SideBar from './home/SideBar';
 import './Home.css';
 
@@ -11,100 +10,114 @@ const { Option } = Select;
 
 const Home = () => {
   const navigate = useNavigate();
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [projectName, setProjectName] = useState('');
   const [isPublic, setIsPublic] = useState(true);
-  const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    const savedUsername = localStorage.getItem('username');
-    if (savedUsername) {
-      setUsername(savedUsername);
-    }
-  }, []);
+  const templates = [
+    { key: 'python', label: 'Python' },
+    { key: 'c', label: 'C' },
+    { key: 'java', label: 'Java' }
+  ];
 
-  const handleLanguageChange = (value) => {
-    setSelectedLanguage(value);
-  };
-
-  const handleCreateProject = () => {
-    if (!selectedLanguage) {
-      message.error('请选择编程语言');
-      return;
-    }
-    if (!projectName.trim()) {
-      message.error('请输入项目名称');
-      return;
-    }
-
-    // 导航到编译界面，带上必要的参数
-    navigate(`/editor`, {
-      state: {
-        language: selectedLanguage,
-        projectName: projectName,
-        isPublic: isPublic
-      }
-    });
-  };
+  const recentProjects = [
+    { id: 1, title: '圆周计算', description: '项目描述' },
+    { id: 2, title: '圆周计算', description: '项目描述' },
+    { id: 3, title: '圆周计算', description: '项目描述' },
+    { id: 4, title: '圆周计算', description: '项目描述' }
+  ];
 
   return (
-    <Layout className="home-layout">
+    <Layout className="home-layout dark">
       <SideBar />
       <Layout>
-        <Header className="home-header">
-          <div className="header-content">
-            <Search placeholder="搜索项目" className="search-input" />
-            <div className="user-info">欢迎, {username}</div>
+        <Header className="home-header dark">
+          <Search 
+            placeholder="search for projects" 
+            className="search-input"
+          />
+          <div className="header-icons">
+            <span>📅</span>
+            <span>❓</span>
+            <span>🔔</span>
+            <span className="avatar">👤</span>
           </div>
         </Header>
-        <Content className="home-content">
-          <div className="template-section">
-            <h2>创建新项目</h2>
-            <div className="language-selection">
-              <h3>选择编程语言</h3>
-              <Select
-                style={{ width: 200 }}
-                placeholder="选择编程语言"
-                onChange={handleLanguageChange}
-              >
-                <Option value="python">Python</Option>
-                <Option value="java">Java</Option>
-                <Option value="c">C 语言</Option>
-              </Select>
-            </div>
-
-            {selectedLanguage && (
-              <div className="project-config">
-                <div className="project-name">
-                  <h3>项目名称</h3>
-                  <Input
-                    placeholder="输入项目名称"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                    style={{ width: 300 }}
-                  />
-                </div>
-
-                <div className="privacy-settings">
-                  <h3>项目权限</h3>
-                  <Radio.Group
-                    value={isPublic}
-                    onChange={(e) => setIsPublic(e.target.value)}
-                  >
-                    <Radio value={true}>公开</Radio>
-                    <Radio value={false}>私有</Radio>
-                  </Radio.Group>
-                </div>
-
-                <Button
-                  type="primary"
-                  className="create-button"
-                  onClick={handleCreateProject}
+        <Content className="home-content dark">
+          <Tabs
+            defaultActiveKey="template"
+            items={[
+              {
+                key: 'template',
+                label: '选择模版',
+                children: (
+                  <div className="template-content">
+                    <div className="project-form">
+                      <div className="form-left">
+                        <Select
+                          placeholder="选择模版"
+                          style={{ width: '100%' }}
+                          onChange={value => setSelectedTemplate(value)}
+                        >
+                          {templates.map(template => (
+                            <Option key={template.key} value={template.key}>
+                              {template.label}
+                            </Option>
+                          ))}
+                        </Select>
+                        <Input
+                          placeholder="项目标题"
+                          value={projectName}
+                          onChange={(e) => setProjectName(e.target.value)}
+                          className="project-title-input dark"
+                        />
+                      </div>
+                      <div className="form-right">
+                        <div className="privacy-options">
+                          <Radio.Group
+                            value={isPublic}
+                            onChange={(e) => setIsPublic(e.target.value)}
+                          >
+                            <Radio value={true}>公开</Radio>
+                            <Radio value={false}>隐私</Radio>
+                          </Radio.Group>
+                        </div>
+                      </div>
+                    </div>
+                    <Button 
+                      type="primary" 
+                      className="create-button"
+                    >
+                      CODE
+                    </Button>
+                  </div>
+                ),
+              },
+              {
+                key: 'github',
+                label: '从GitHub上拉取',
+                children: <div>GitHub导入功能</div>,
+              },
+            ]}
+          />
+          
+          <div className="recent-projects-container">
+            <h3>最近的项目</h3>
+            <div className="recent-projects-grid">
+              {recentProjects.map(project => (
+                <Card 
+                  key={project.id}
+                  className="recent-project-card"
+                  bordered={false}
                 >
-                  创建项目
-                </Button>
-              </div>
-            )}
+                  <div className="project-icon">—</div>
+                  <div className="project-info">
+                    <h4>{project.title}</h4>
+                    <p>{project.description}</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </Content>
       </Layout>

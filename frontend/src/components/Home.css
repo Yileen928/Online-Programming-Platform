@@ -42,7 +42,14 @@
 }
 
 .section-header {
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  margin: 0;
 }
 
 .template-section {
@@ -163,4 +170,189 @@
 .template-section h3 {
   margin-bottom: 10px;
   color: #333;
+}
+
+/* GitHub 按钮样式 */
+.ant-btn-primary.github-import {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-import .anticon {
+  font-size: 16px;
+}
+
+/* 深色主题 */
+.dark {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.home-header.dark {
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.search-input {
+  background: #fff;
+  border-radius: 20px;
+}
+
+.template-content {
+  padding: 20px;
+}
+
+.template-list {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.template-item {
+  padding: 10px 20px;
+  background: #2a2a2a;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-item.selected {
+  background: #3a3a3a;
+}
+
+.project-title-input.dark {
+  background: #2a2a2a;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+.privacy-options {
+  margin: 20px 0;
+}
+
+.create-button {
+  width: 100%;
+  background: #8b0000;
+  border: none;
+}
+
+.header-icons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* 覆盖 antd Tabs 样式 */
+.ant-tabs-tab {
+  color: #fff !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active {
+  background: transparent !important;
+}
+
+.ant-tabs-nav::before {
+  border-bottom-color: #333 !important;
+}
+
+/* 项目表单布局 */
+.project-form {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-right {
+  flex: 1;
+}
+
+/* 深色主题下拉框样式 */
+.ant-select-selector {
+  background-color: #2a2a2a !important;
+  border-color: #333 !important;
+  color: #fff !important;
+}
+
+.ant-select-selection-placeholder {
+  color: #666 !important;
+}
+
+/* 创建按钮样式 */
+.create-button {
+  width: 100%;
+  height: 40px;
+  background: #8b0000;
+  border: none;
+  margin-top: 20px;
+}
+
+/* Radio 按钮样式 */
+.ant-radio-wrapper {
+  color: #fff !important;
+}
+
+.privacy-options {
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+/* 最近项目容器样式 */
+.recent-projects-container {
+  margin-top: 40px;
+  padding: 20px;
+}
+
+.recent-projects-container h3 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.recent-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.recent-project-card {
+  background: #2a2a2a !important;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.recent-project-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.project-icon {
+  font-size: 24px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.project-info h4 {
+  color: #fff;
+  margin: 0;
+}
+
+.project-info p {
+  color: #666;
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+
+/* 覆盖 Card 组件的默认样式 */
+.ant-card-body {
+  padding: 16px !important;
 } 
