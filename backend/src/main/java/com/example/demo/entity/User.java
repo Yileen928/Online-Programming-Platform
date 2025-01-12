@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -15,4 +16,6 @@ public class User {
     private String password;
     private String email;
     private String role;
+    private String resetToken;
+    private LocalDateTime resetTokenExpiry;
 } 
