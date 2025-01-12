@@ -135,4 +135,32 @@
 .user-info {
   color: white;
   margin-left: 20px;
+}
+
+.language-selection {
+  margin: 20px 0;
+}
+
+.project-config {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.project-name {
+  margin-bottom: 20px;
+}
+
+.privacy-settings {
+  margin-bottom: 20px;
+}
+
+.create-button {
+  margin-top: 20px;
+}
+
+.template-section h3 {
+  margin-bottom: 10px;
+  color: #333;
 } 
