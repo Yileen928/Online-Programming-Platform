@@ -1,126 +1,79 @@
+/* 整体布局 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f0f0;
+}
+
 .home-layout {
+  display: flex;
   min-height: 100vh;
 }
 
+/* 侧边栏 */
 .home-sider {
+  width: 200px;
+  background-color: #222;
+  color: #fff;
   padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 20px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-icon:hover {
+  background-color: #333;
+}
+
+.sidebar-icon svg {
+  width: 22px;
+  height: 22px;
+  margin-right: 15px;
+  fill: #fff;
+}
+
+.sidebar-icon span {
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .logo {
-  height: 32px;
-  margin: 16px;
+  height: 36px;
+  margin: 20px 0;
   text-align: center;
+}
+
+.home-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+  fill: #fff;
 }
 
 .logout-button {
-  position: absolute;
-  bottom: 20px;
   width: 100%;
-  padding: 0 16px;
-}
-
-.home-header {
-  background: #fff;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  max-width: 600px;
-  width: 100%;
-}
-
-.home-content {
-  margin: 24px;
-  padding: 24px;
-  background: #fff;
-}
-
-.project-section {
-  margin-bottom: 40px;
-}
-
-.section-header {
-  margin-bottom: 20px;
-}
-
-.template-section {
-  background: #f5f5f5;
-  padding: 24px;
-  border-radius: 8px;
-}
-
-.template-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.project-title-input {
-  width: 300px;
-}
-
-.privacy-settings {
-  margin: 20px 0;
-}
-
-.radio-description {
-  color: #666;
-  font-size: 12px;
-  margin-left: 24px;
-}
-
-.create-button {
-  margin-top: 20px;
-}
-
-.recent-projects {
-  margin-top: 40px;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.project-card {
+  padding: 12px 20px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
   cursor: pointer;
-}
-
-.project-card h4 {
-  margin: 0;
-}
-
-.project-time {
-  color: #666;
-  font-size: 12px;
-}
-
-.loading-projects {
-  grid-column: 1 / -1;
+  transition: background-color 0.3s ease;
   text-align: center;
-  padding: 20px;
-  color: #666;
+  margin-top: auto;
+  font-size: 15px;
 }
 
-.no-projects {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  background: #f5f5f5;
-  border-radius: 4px;
+.logout-button:hover {
+  background-color: #c82333;
 }
-
-.project-card {
-  transition: all 0.3s ease;
-}
-
-.project-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-} 
