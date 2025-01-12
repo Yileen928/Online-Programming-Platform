@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +10,6 @@ import org.slf4j.LoggerFactory;
 public class AdminController {
     
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
-    
-    @Autowired
-    private UserService userService;
     
     @PostMapping("/update-passwords")
     public ResponseEntity<?> updatePasswords() {

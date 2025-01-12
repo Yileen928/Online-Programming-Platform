@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
-import Register from './components/Register';
+// import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Projects from './components/Projects';
 import ProjectManagement from './components/ProjectManagement';
@@ -26,7 +26,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* <Route path="/register" element={<Register />} /> */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects" element={<ProjectManagement />} />
