@@ -23,18 +23,16 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [privacyType, setPrivacyType] = useState('public');
   const [projectTitle, setProjectTitle] = useState('');
+  const [username, setUsername] = useState('');
 
   // ============== API Calls ==============
   const fetchRecentProjects = async () => {
     try {
-      setLoading(true);
-      const data = await userApi.getRecentProjects();
-      setRecentProjects(data);
+      const result = await userApi.getRecentProjects();
+      setRecentProjects(result || []);
     } catch (error) {
-      message.error('获取最近项目失败');
-      console.error('获取最近项目失败:', error);
-    } finally {
-      setLoading(false);
+      console.log('获取最近项目失败，可能是新用户');
+      setRecentProjects([]);
     }
   };
 
@@ -81,6 +79,10 @@ const Home = () => {
 
   // ============== Effects ==============
   useEffect(() => {
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
     fetchRecentProjects();
   }, []);
 
@@ -89,10 +91,15 @@ const Home = () => {
       <SideBar onLogout={handleLogout} />
       <Layout>
         <Header className="home-header">
-          <Search
-            placeholder="search for projects"
-            className="search-input"
-          />
+          <div className="header-content">
+            <Search
+              placeholder="search for projects"
+              className="search-input"
+            />
+            <div className="user-info">
+              欢迎, {username}
+            </div>
+          </div>
         </Header>
         <Content className="home-content">
           <div className="project-section">

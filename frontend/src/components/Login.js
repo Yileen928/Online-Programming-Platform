@@ -11,6 +11,7 @@ const Login = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +31,15 @@ const Login = () => {
     setLoading(true);
     try {
       const result = await userApi.login(formData);
-      localStorage.setItem('token', result.token);
-      message.success('登录成功');
-      navigate('/home');
+      if (result.token) {
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('username', formData.username);
+        message.success('登录成功');
+        navigate('/home');
+      }
     } catch (error) {
-      message.error(error.response?.data?.message || '登录失败，请重试');
+      console.error('Login error:', error);
+      setError(error.response?.data?.message || '登录失败，请重试');
     } finally {
       setLoading(false);
     }
@@ -44,6 +49,8 @@ const Login = () => {
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
         <h2>用户登录</h2>
+        
+        {error && <div className="error-message">{error}</div>}
         
         <div className="form-item">
           <input

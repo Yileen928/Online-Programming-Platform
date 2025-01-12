@@ -2,13 +2,9 @@ import request from './request';
 
 export const userApi = {
   // 用户登录
-  login: (data) => {
-    return request
-        .post('/api/user/login', data)
-        .then((response) => response.data) // 提取成功响应的数据
-        .catch((error) => {
-          throw error.response?.data || { message: '登录失败' }; // 使用后端错误信息
-        });
+  login: async (data) => {
+    const response = await request.post('/api/user/login', data);
+    return response;  // request.js 的拦截器已经处理了 response.data
   },
 
   // 获取用户信息

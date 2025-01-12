@@ -9,7 +9,7 @@ const request = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  withCredentials: true
+  withCredentials: false
 });
 
 // 请求拦截器

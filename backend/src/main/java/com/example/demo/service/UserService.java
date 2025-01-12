@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.User;
+import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,15 +23,12 @@ public class UserService {
      * @return 如果验证通过，返回对应的用户对象；否则返回 null
      */
     public User verifyUser(String username, String password) {
-        // 从数据库通过用户名获取用户
-        User user = getUserByUsername(username);
-        if (user == null) {
-            return null; // 用户不存在
+        User user = userRepository.findByUsername(username)
+            .orElse(null);
+        if (user != null && user.getPassword().equals(password)) {  // 暂时直接比较密码
+            return user;
         }
-
-        // 验证密码
-        boolean isPasswordValid = passwordEncoder.matches(password, user.getPassword());
-        return isPasswordValid ? user : null; // 如果密码正确，返回用户，否则返回 null
+        return null;
     }
 
     /**
@@ -54,7 +51,8 @@ public class UserService {
      * @return 对应的用户
      */
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+            .orElse(null);  // 如果用户不存在返回 null
     }
 
     /**

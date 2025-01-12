@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.model.User;
+import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
