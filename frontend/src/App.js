@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
@@ -10,7 +10,6 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // 开发阶段：设置一个假的 token
     if (process.env.NODE_ENV === 'development') {
       localStorage.setItem('token', 'fake-token-for-development');
     }
@@ -19,9 +18,11 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <Router future={{ 
+      v7_startTransition: true,
+      v7_relativeSplatPath: true
+    }}>
       <Routes>
-        {/* 开发阶段直接渲染 Home 组件 */}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />

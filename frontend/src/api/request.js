@@ -8,19 +8,16 @@ const request = axios.create({
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
 // 请求拦截器
 request.interceptors.request.use(
   config => {
-    // 开发环境返回空数组
-    if (process.env.NODE_ENV === 'development') {
-      if (config.url === '/api/datasets') {
-        return Promise.resolve({
-          data: []
-        });
-      }
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
@@ -36,7 +33,6 @@ request.interceptors.response.use(
   },
   error => {
     if (error.response?.status === 401) {
-      // token过期或未登录
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
