@@ -1,19 +1,63 @@
 import { Menu } from 'antd';
+import { 
+  HomeOutlined, 
+  ProjectOutlined, 
+  DatabaseOutlined,
+  TeamOutlined,
+  MessageOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
+import './SideBar.css';
 
 const SideBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const menuItems = [
     {
-      key: '1',
-      label: '首页',
+      key: '/home',
       icon: <HomeOutlined />,
+      label: '首页',
+      order: 1
     },
     {
-      key: '2',
-      label: '项目',
+      key: '/projects',
       icon: <ProjectOutlined />,
+      label: '项目',
+      order: 2
     },
-    // ... 其他菜单项
-  ];
+    {
+      key: '/datasets',
+      icon: <DatabaseOutlined />,
+      label: '数据集',
+      order: 3
+    },
+    {
+      key: '/teams',
+      icon: <TeamOutlined />,
+      label: '团队',
+      order: 4
+    },
+    {
+      key: '/discussions',
+      icon: <MessageOutlined />,
+      label: '讨论',
+      order: 5
+    },
+    {
+      key: '/settings',
+      icon: <SettingOutlined />,
+      label: '设置',
+      order: 6
+    }
+  ].sort((a, b) => a.order - b.order);
+
+  const handleMenuClick = ({ key }) => {
+    navigate(key);
+  };
+
+  const currentPath = '/' + location.pathname.split('/')[1];
 
   return (
     <aside className="sidebar">
@@ -22,8 +66,10 @@ const SideBar = () => {
       </div>
       <Menu
         mode="inline"
-        defaultSelectedKeys={['1']}
+        selectedKeys={[currentPath]}
         items={menuItems}
+        onClick={handleMenuClick}
+        className="sidebar-menu"
       />
     </aside>
   );

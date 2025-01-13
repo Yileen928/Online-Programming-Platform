@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Layout, Table, Button, Space, Tag, Input } from 'antd';
-import SideBar from './home/SideBar';
 import './ProjectManagement.css';
 
 const { Header, Content } = Layout;
@@ -32,37 +31,32 @@ const ProjectManagement = () => {
   ]);
 
   return (
-    <Layout className="project-management-layout dark">
-      <SideBar />
-      <Layout>
-        <Header className="project-header dark">
-          <Search 
-            placeholder="search for projects" 
-            className="search-input"
-          />
-          <div className="header-icons">
-            <span>📅</span>
-            <span>❓</span>
-            <span>🔔</span>
-            <Button type="primary" className="new-project-btn">+</Button>
+    <div className="project-content">
+      <div className="project-header">
+        <Search 
+          placeholder="search for projects" 
+          className="search-input"
+        />
+        <div className="header-icons">
+          <span>📅</span>
+          <span>❓</span>
+          <span>🔔</span>
+          <Button type="primary" className="new-project-btn">+</Button>
+        </div>
+      </div>
+      <div className="project-list">
+        {projects.map(project => (
+          <div key={project.key} className="project-item">
+            <div className="project-type">{project.type}</div>
+            <div className="project-info">
+              <h4>{project.name}</h4>
+              <p>{project.description}</p>
+            </div>
+            <div className="project-date">{project.lastModified}</div>
           </div>
-        </Header>
-        <Content className="project-content">
-          <div className="project-list">
-            {projects.map(project => (
-              <div key={project.key} className="project-item">
-                <div className="project-type">{project.type}</div>
-                <div className="project-info">
-                  <h4>{project.name}</h4>
-                  <p>{project.description}</p>
-                </div>
-                <div className="project-date">{project.lastModified}</div>
-              </div>
-            ))}
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+        ))}
+      </div>
+    </div>
   );
 };
 

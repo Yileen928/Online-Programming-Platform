@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Table, Button, Space, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import SideBar from './home/SideBar';
 import './TeamManagement.css';
 
 const { Header, Content } = Layout;
@@ -66,22 +65,17 @@ const TeamManagement = () => {
   ];
 
   return (
-    <Layout className="team-management-layout dark">
-      <SideBar />
-      <Layout>
-        <Header className="team-header dark">
-          <h2>团队管理</h2>
-          <Button type="primary">创建团队</Button>
-        </Header>
-        <Content className="team-content">
-          <Table 
-            columns={columns} 
-            dataSource={teams}
-            pagination={false}
-          />
-        </Content>
-      </Layout>
-    </Layout>
+    <div className="team-content">
+      <div className="team-header">
+        <h2>团队管理</h2>
+        <Button type="primary">创建团队</Button>
+      </div>
+      <Table 
+        columns={columns} 
+        dataSource={teams}
+        pagination={false}
+      />
+    </div>
   );
 };
 
