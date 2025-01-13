@@ -3,23 +3,24 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    // 注入 EmailService，用于发送邮件
     @Autowired
     private EmailService emailService;
 
@@ -31,10 +32,20 @@ public class UserService {
      * @return 如果验证通过，返回对应的用户对象；否则返回 null
      */
     public User verifyUser(String username, String password) {
+        log.info("Attempting to verify user: {}", username);
         User user = userRepository.findByUsername(username).orElse(null);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {  // 使用 PasswordEncoder 的 matches 方法
+        if (user == null) {
+            log.warn("User not found: {}", username);
+            return null;
+        }
+        
+        // 直接比较密码
+        if (user.getPassword().equals(password)) {
+            log.info("Login successful for user: {}", username);
             return user;
         }
+        
+        log.warn("Password mismatch for user: {}", username);
         return null;
     }
 
@@ -57,10 +68,9 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        // 根据需要设置其他字段，如角色、创建时间等
+        user.setPassword(request.getPassword());  // 直接设置密码，不加密
 
-        return userRepository.save(user); // 保存用户到数据库
+        return userRepository.save(user);
     }
 
     /**
@@ -160,10 +170,9 @@ public class UserService {
             throw new RuntimeException("重置令牌已过期");
         }
 
-        // 更新密码
-        user.setPassword(passwordEncoder.encode(newPassword));
-        user.setResetToken(null); // 清除令牌
-        user.setResetTokenExpiry(null); // 清除过期时间
+        user.setPassword(newPassword);  // 直接设置新密码，不加密
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
         userRepository.save(user);
     }
 }
