@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  padding: 0;
+  background: #1a1a1a;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +12,34 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.ant-layout {
+  transition: none !important;
+  min-height: 100vh;
+}
+
+.ant-layout-has-sider {
+  padding-left: 200px;
+}
+
+.ant-layout-sider {
+  transition: none !important;
+  z-index: 1000;
+}
+
+.ant-menu {
+  transition: none !important;
+}
+
+.ant-layout-header {
+  transition: none !important;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
 }

@@ -1,78 +1,134 @@
-import React, { useState } from 'react';
-import { userApi } from '../api/user';
-import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-c';
+import 'prismjs/components/prism-cpp';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/toolbar/prism-toolbar.css';
+import 'prismjs/plugins/toolbar/prism-toolbar';
+import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.username || !formData.password) {
-      message.error('请输入用户名和密码');
-      return;
+  const [typingText, setTypingText] = useState('');
+  const codeExample = `function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+  
+  const pivot = arr[0];
+  const left = [];
+  const right = [];
+  
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
     }
+  }
+  
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
 
-    setLoading(true);
-    try {
-      const result = await userApi.login(formData);
-      localStorage.setItem('token', result.token);
-      message.success('登录成功');
-      navigate('/home');
-    } catch (error) {
-      message.error(error.response?.data?.message || '登录失败，请重试');
-    } finally {
-      setLoading(false);
-    }
+const array = [64, 34, 25, 12, 22, 11, 90];
+console.log(quickSort(array));`;
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const intervalId = setInterval(() => {
+      if (currentIndex < codeExample.length) {
+        setTypingText(prev => {
+          const newText = prev + codeExample[currentIndex];
+          setTimeout(() => {
+            Prism.highlightAll();
+          }, 0);
+          return newText;
+        });
+        currentIndex++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 50);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const onFinish = (values) => {
+    console.log('登录信息:', values);
+    navigate('/home');
   };
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2>用户登录</h2>
-        
-        <div className="form-item">
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            placeholder="请输入用户名"
-          />
-        </div>
+      <div className="login-section">
+        <div className="login-form-container">
+          <div className="logo" alt="logo" > </div>
+          <div className='login-input'>
+          <Form
+            name="login"
+            onFinish={onFinish}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="username"
+              rules={[{ required: true, message: '请输入用户名!' }]}
+            >
+              <Input 
+                prefix={<UserOutlined />} 
+                placeholder="用户名" 
+                size="large"
+              />
+            </Form.Item>
 
-        <div className="form-item">
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="请输入密码"
-          />
-        </div>
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: '请输入密码!' }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="密码"
+                size="large"
+              />
+            </Form.Item>
 
-        <button 
-          type="submit" 
-          className="login-button"
-          disabled={loading}
-        >
-          {loading ? '登录中...' : '登录'}
-        </button>
-      </form>
+            <Form.Item>
+              <Button 
+                type="primary" 
+                htmlType="submit"
+                className="login-button"
+                size="large"
+              >
+                登录
+              </Button>
+            </Form.Item>
+
+            <div className="login-links">
+              <Link to="/forgot-password">忘记密码？</Link>
+            </div>
+          </Form>
+          </div>
+          
+        </div>
+      </div>
+      
+      <div className="code-section">
+        <div className="test-font"></div>
+        <pre className="code-display">
+          <code className="language-javascript">
+            {typingText}
+          </code>
+          <span className="typing-text"> </span>
+        </pre>
+      </div>
     </div>
   );
 };

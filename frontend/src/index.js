@@ -5,6 +5,7 @@ import App from './App';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import 'antd/dist/reset.css';
+import '@fontsource/press-start-2p';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

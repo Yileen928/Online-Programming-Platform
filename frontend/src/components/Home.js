@@ -1,164 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Input, Button, Card, Radio, Space, message } from 'antd';
-import { userApi } from '../api/user';
-import SideBar from './home/SideBar';
+import { Input, Select, Radio, Button, Tabs, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import { userApi } from '../api/user';
 
-const { Header, Content } = Layout;
 const { Search } = Input;
-
-// ============== Path Implementation ==============
-const PATHS = {
-  LOGIN: '/login',
-  PROFILE: '/profile',
-  PROJECT_DETAIL: (id) => `/project/${id}`
-};
+const { Option } = Select;
 
 const Home = () => {
   const navigate = useNavigate();
-
-  // ============== State ==============
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [projectName, setProjectName] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
   const [recentProjects, setRecentProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [privacyType, setPrivacyType] = useState('public');
-  const [projectTitle, setProjectTitle] = useState('');
 
-  // ============== API Calls ==============
-  const fetchRecentProjects = async () => {
-    try {
-      setLoading(true);
-      const data = await userApi.getRecentProjects();
-      setRecentProjects(data);
-    } catch (error) {
-      message.error('获取最近项目失败');
-      console.error('获取最近项目失败:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ============== Handlers ==============
-  const handlePrivacyChange = (e) => {
-    setPrivacyType(e.target.value);
-  };
-
-  const handleProjectTitleChange = (value) => {
-    setProjectTitle(value);
-  };
-
-  const handleCreateProject = async () => {
-    if (!projectTitle) {
-      message.warning('请输入项目标题');
-      return;
-    }
-
-    try {
-      const result = await userApi.createProject({
-        title: projectTitle,
-        isPrivate: privacyType === 'private'
-      });
-      message.success('项目创建成功');
-      navigate(PATHS.PROJECT_DETAIL(result.id));
-    } catch (error) {
-      message.error('项目创建失败');
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await userApi.logout();
-      localStorage.removeItem('token');
-      navigate(PATHS.LOGIN);
-    } catch (error) {
-      message.error('登出失败');
-    }
-  };
-
-  const handleProjectClick = (projectId) => {
-    navigate(PATHS.PROJECT_DETAIL(projectId));
-  };
-
-  // ============== Effects ==============
   useEffect(() => {
     fetchRecentProjects();
   }, []);
 
-  return (
-    <Layout className="home-layout">
-      <SideBar onLogout={handleLogout} />
-      <Layout>
-        <Header className="home-header">
-          <Search
-            placeholder="search for projects"
-            className="search-input"
-          />
-        </Header>
-        <Content className="home-content">
-          <div className="project-section">
-            <div className="section-header">
-              <Space>
-                <Button type="text">选择模版</Button>
-                <Button type="text">从GitHub上拉取</Button>
-              </Space>
+  const fetchRecentProjects = async () => {
+    try {
+      const response = await userApi.getRecentProjects();
+      setRecentProjects(response || []);
+    } catch (error) {
+      console.error('获取最近项目失败:', error);
+    }
+  };
+
+  const items = [
+    {
+      key: 'template',
+      label: '选择模版',
+      children: (
+        <div className="template-content">
+          <div className="template-form">
+            <div className="form-left">
+              <Select
+                placeholder="选择模版"
+                style={{ width: '100%' }}
+                onChange={value => setSelectedTemplate(value)}
+              >
+                <Option value="python">Python</Option>
+                <Option value="c">C</Option>
+                <Option value="java">Java</Option>
+              </Select>
+              <Input
+                placeholder="项目标题"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className="project-title-input dark"
+              />
             </div>
-            
-            <div className="template-section">
-              <div className="template-header">
-                <span>模版</span>
-                <Search
-                  placeholder="请输入项目标题"
-                  className="project-title-input"
-                  value={projectTitle}
-                  onChange={(e) => handleProjectTitleChange(e.target.value)}
-                />
-              </div>
-              
-              <div className="privacy-settings">
-                <span>隐私</span>
-                <Radio.Group value={privacyType} onChange={handlePrivacyChange}>
-                  <Radio value="public">
-                    公开
-                    <div className="radio-description">任何人都可以查看和分享这个项目。</div>
-                  </Radio>
-                  <Radio value="private">
-                    隐私
-                    <div className="radio-description">只有您和您分享的人可以查看这个项目。</div>
-                  </Radio>
+            <div className="form-right">
+              <div className="privacy-options">
+                <Radio.Group
+                  value={isPublic}
+                  onChange={(e) => setIsPublic(e.target.value)}
+                >
+                  <Radio value={true}>公开</Radio>
+                  <Radio value={false}>隐私</Radio>
                 </Radio.Group>
               </div>
-              
-              <Button type="primary" block className="create-button" onClick={handleCreateProject}>
-                CODE
-              </Button>
             </div>
           </div>
-          
-          <div className="recent-projects">
-            <h3>最近的项目</h3>
-            <div className="projects-grid">
-              {loading ? (
-                <div className="loading-projects">加载中...</div>
-              ) : recentProjects.length > 0 ? (
-                recentProjects.map((project) => (
-                  <Card 
-                    key={project.id} 
-                    className="project-card"
-                    onClick={() => handleProjectClick(project.id)}
-                  >
-                    <h4>{project.title}</h4>
-                    <p>{project.description}</p>
-                    <span className="project-time">{project.lastModified}</span>
-                  </Card>
-                ))
-              ) : (
-                <div className="no-projects">暂无最近项目</div>
-              )}
-            </div>
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+          <Button 
+            type="primary" 
+            className="create-button"
+          >
+            CODE
+          </Button>
+        </div>
+      ),
+    },
+    {
+      key: 'github',
+      label: '从GitHub上拉取',
+      children: <div>GitHub导入功能</div>,
+    },
+  ];
+
+  return (
+    <div className="home-content dark">
+      <div className="header-search">
+        <Search 
+          placeholder="search for projects" 
+          className="search-input"
+        />
+        <div className="header-icons">
+          <span>📅</span>
+          <span>❓</span>
+          <span>🔔</span>
+          <span className="avatar">👤</span>
+        </div>
+      </div>
+
+      <Tabs items={items} />
+      
+      <div className="recent-projects">
+        <h3>最近的项目</h3>
+        <div className="projects-grid">
+          {recentProjects.map(project => (
+            <Card 
+              key={project.id}
+              className="project-card"
+              bordered={false}
+            >
+              <div className="project-icon">—</div>
+              <div className="project-info">
+                <h4>{project.title}</h4>
+                <p>{project.description}</p>
+                <span className="project-time">{project.lastModified}</span>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

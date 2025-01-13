@@ -2,77 +2,86 @@
   min-height: 100vh;
 }
 
-.project-management-header {
-  background: #fff;
+.project-header {
   padding: 0 24px;
-  display: flex;
-  align-items: center;
-}
-
-.project-management-content {
-  margin: 24px;
-  padding: 24px;
-  background: #fff;
-}
-
-.project-section {
-  margin-bottom: 40px;
-}
-
-.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  background: #1a1a1a !important;
+  border-bottom: 1px solid #333;
 }
 
-.section-header h2 {
-  margin: 0;
-}
-
-.section-search {
-  width: 300px;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.header-icons {
+  display: flex;
+  align-items: center;
   gap: 20px;
 }
 
-.project-card {
+.search-input {
+  width: 400px;
+  background: #2a2a2a;
+  border: none;
+}
+
+.new-project-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  padding: 0;
+}
+
+.project-content {
+  padding: 24px;
+  background: #1a1a1a;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #2a2a2a;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.project-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.project-type {
+  width: 40px;
+  height: 40px;
+  background: #333;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  color: #fff;
 }
 
-.project-card h4 {
-  margin: 8px 0;
+.project-info {
+  flex: 1;
 }
 
-.project-time {
+.project-info h4 {
+  color: #fff;
+  margin: 0;
+}
+
+.project-info p {
+  color: #666;
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.project-date {
   color: #666;
   font-size: 12px;
-  display: block;
-  margin-top: 8px;
-}
-
-.loading-projects {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
-.no-projects {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  background: #f5f5f5;
-  border-radius: 4px;
 } 
