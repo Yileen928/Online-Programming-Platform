@@ -5,13 +5,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-c';
+import 'prismjs/components/prism-cpp';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/toolbar/prism-toolbar.css';
+import 'prismjs/plugins/toolbar/prism-toolbar';
+import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const [typingText, setTypingText] = useState('');
-  const codeExample = `// 快速排序算法实现
-function quickSort(arr) {
+  const codeExample = `function quickSort(arr) {
   if (arr.length <= 1) return arr;
   
   const pivot = arr[0];
@@ -29,10 +39,8 @@ function quickSort(arr) {
   return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-// 测试数组
 const array = [64, 34, 25, 12, 22, 11, 90];
-console.log(quickSort(array));
-// 输出: [11, 12, 22, 25, 34, 64, 90]`;
+console.log(quickSort(array));`;
 
   useEffect(() => {
     let currentIndex = 0;
@@ -40,7 +48,6 @@ console.log(quickSort(array));
       if (currentIndex < codeExample.length) {
         setTypingText(prev => {
           const newText = prev + codeExample[currentIndex];
-          // 每次更新文本后重新应用高亮
           setTimeout(() => {
             Prism.highlightAll();
           }, 0);

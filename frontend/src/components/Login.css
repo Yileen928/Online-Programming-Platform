@@ -35,18 +35,23 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  background: #2a2a2a;
+  background: transparent;
+  font-family: 'Press Start 2P', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .code-display {
-  font-family: 'AaWeiWeiDianZhenTi', monospace !important;
+  font-family: 'Press Start 2P', monospace !important;
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
   padding: 20px;
   border-radius: 8px;
-  background: #1a1a1a;
+  background: transparent;
   overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .code-display code {
@@ -66,12 +71,24 @@
 }
 
 /* 代码高亮自定义样式 */
-.code-display .comment { color: #6a9955; }
-.code-display .keyword { color: #569cd6; }
-.code-display .function { color: #dcdcaa; }
-.code-display .number { color: #b5cea8; }
-.code-display .string { color: #ce9178; }
-.code-display .operator { color: #d4d4d4; }
+.code-display .token.comment { color: #88c0d0; }
+.code-display .token.keyword { color: #81a1c1; }
+.code-display .token.function { color: #88c0d0; }
+.code-display .token.number { color: #b48ead; }
+.code-display .token.string { color: #a3be8c; }
+.code-display .token.operator { color: #81a1c1; }
+.code-display .token.punctuation { color: #eceff4; }
+.code-display .token.parameter { color: #8fbcbb; }
+.code-display .token.property { color: #8fbcbb; }
+.code-display .token.constant { color: #5e81ac; }
+.code-display .token.variable { color: #8fbcbb; }
+.code-display .token.class-name { color: #8fbcbb; }
+.code-display .token.boolean { color: #81a1c1; }
+.code-display .token.builtin { color: #88c0d0; }
+.code-display .token.selector { color: #a3be8c; }
+.code-display .token.important { color: #ebcb8b; }
+.code-display .token.atrule { color: #88c0d0; }
+.code-display .token.regex { color: #a3be8c; }
 
 /* 输入框样式 */
 .ant-input {
@@ -118,8 +135,9 @@
 
 /* 添加一个测试元素来验证字体是否加载 */
 .test-font {
-  font-family: 'AaWeiWeiDianZhenTi', sans-serif !important;
+  font-family: 'Press Start 2P', sans-serif !important;
   color: white;
   font-size: 24px;
   margin-bottom: 20px;
+  line-height: 1.4;
 }
