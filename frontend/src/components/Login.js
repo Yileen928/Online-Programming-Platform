@@ -71,7 +71,8 @@ console.log(quickSort(array));`;
     <div className="login-container">
       <div className="login-section">
         <div className="login-form-container">
-          <h1 className="login-title">在线编程平台</h1>
+          <div className="logo" alt="logo" > </div>
+          <div className='login-input'>
           <Form
             name="login"
             onFinish={onFinish}
@@ -111,15 +112,16 @@ console.log(quickSort(array));`;
             </Form.Item>
 
             <div className="login-links">
-              <Link to="/register">注册账号</Link>
               <Link to="/forgot-password">忘记密码？</Link>
             </div>
           </Form>
+          </div>
+          
         </div>
       </div>
       
       <div className="code-section">
-        <div className="test-font">测试字体加载</div>
+        <div className="test-font"></div>
         <pre className="code-display">
           <code className="language-javascript">
             {typingText}

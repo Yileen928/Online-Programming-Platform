@@ -1,35 +1,43 @@
 .login-container {
   display: flex;
   min-height: 100vh;
-  background: #1a1a1a;
+  background: #000000;
 }
-
 .login-section {
   flex: 1.1;
   display: flex;
   border-radius: 0pt 30pt 30pt 0pt;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: #ffffff;
+  backdrop-filter: blur(15px); /* 增加模糊程度 */
   padding: 40px;
-  border-right: 1px solid #333;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
 }
 
 .login-form-container {
-  width: 400px;
+  width: 100%;
   padding: 40px;
-  background: #2a2a2a;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.login-title {
-  color: #fff;
-  font-size: 24px;
+.logo {
   margin-bottom: 30px;
+  flex: 1;
   text-align: center;
+  background-image: url('/src/images/logo.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
+.login-input{
+  flex: 4;
+  margin-top: 40pt;
+}
 .code-section {
   flex: 2;
   padding: 40px;
@@ -71,7 +79,7 @@
 }
 
 /* 代码高亮自定义样式 */
-.code-display .token.comment { color: #88c0d0; }
+.code-display .token.comment { color: #027b9c; }
 .code-display .token.keyword { color: #81a1c1; }
 .code-display .token.function { color: #88c0d0; }
 .code-display .token.number { color: #b48ead; }
