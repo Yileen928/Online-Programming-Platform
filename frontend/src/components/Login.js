@@ -1,103 +1,125 @@
-import React, { useState } from 'react';
-import { userApi } from '../api/user';
-import { message, Form, Input, Button } from 'antd';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/components/prism-javascript';
 import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  // 表单布局配置（可选）
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-  };
-
-  // 表单提交处理
-  const onFinish = async (values) => {
-    const { username, password } = values;
-
-    if (!username || !password) {
-      message.error('请输入用户名和密码');
-      return;
+  const [typingText, setTypingText] = useState('');
+  const codeExample = `// 快速排序算法实现
+function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+  
+  const pivot = arr[0];
+  const left = [];
+  const right = [];
+  
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
     }
+  }
+  
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
 
-    setLoading(true);
-    setError('');
-    try {
-      const result = await userApi.login({ username, password });
-      if (result.token) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('username', username);
-        message.success('登录成功');
-        navigate('/home');
+// 测试数组
+const array = [64, 34, 25, 12, 22, 11, 90];
+console.log(quickSort(array));
+// 输出: [11, 12, 22, 25, 34, 64, 90]`;
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const intervalId = setInterval(() => {
+      if (currentIndex < codeExample.length) {
+        setTypingText(prev => {
+          const newText = prev + codeExample[currentIndex];
+          // 每次更新文本后重新应用高亮
+          setTimeout(() => {
+            Prism.highlightAll();
+          }, 0);
+          return newText;
+        });
+        currentIndex++;
+      } else {
+        clearInterval(intervalId);
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setError(error.response?.data?.message || '登录失败，请重试');
-    } finally {
-      setLoading(false);
-    }
-  };
+    }, 50);
 
-  // 表单提交失败处理（可选）
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const onFinish = (values) => {
+    console.log('登录信息:', values);
+    navigate('/home');
   };
 
   return (
     <div className="login-container">
-      <Form
-        {...layout}
-        name="login"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <h2>用户登录</h2>
+      <div className="login-section">
+        <div className="login-form-container">
+          <h1 className="login-title">在线编程平台</h1>
+          <Form
+            name="login"
+            onFinish={onFinish}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="username"
+              rules={[{ required: true, message: '请输入用户名!' }]}
+            >
+              <Input 
+                prefix={<UserOutlined />} 
+                placeholder="用户名" 
+                size="large"
+              />
+            </Form.Item>
 
-        {/* 错误信息展示 */}
-        {error && <div className="error-message">{error}</div>}
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: '请输入密码!' }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="密码"
+                size="large"
+              />
+            </Form.Item>
 
-        {/* 用户名输入框 */}
-        <Form.Item
-          label="用户名"
-          name="username"
-          rules={[{ required: true, message: '请输入用户名!' }]}
-        >
-          <Input placeholder="请输入用户名" />
-        </Form.Item>
+            <Form.Item>
+              <Button 
+                type="primary" 
+                htmlType="submit"
+                className="login-button"
+                size="large"
+              >
+                登录
+              </Button>
+            </Form.Item>
 
-        {/* 密码输入框 */}
-        <Form.Item
-          label="密码"
-          name="password"
-          rules={[{ required: true, message: '请输入密码!' }]}
-        >
-          <Input.Password placeholder="请输入密码" />
-        </Form.Item>
-
-        {/* 提交按钮 */}
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {loading ? '登录中...' : '登录'}
-          </Button>
-        </Form.Item>
-
-        {/* 注册和忘记密码链接 */}
-        <Form.Item {...tailLayout}>
-          <div className="login-links">
-            {/* <Link to="/register">注册新账号</Link> */}
-            <Link to="/forgot-password">忘记密码？</Link>
-          </div>
-        </Form.Item>
-      </Form>
+            <div className="login-links">
+              <Link to="/register">注册账号</Link>
+              <Link to="/forgot-password">忘记密码？</Link>
+            </div>
+          </Form>
+        </div>
+      </div>
+      
+      <div className="code-section">
+        <div className="test-font">测试字体加载</div>
+        <pre className="code-display">
+          <code className="language-javascript">
+            {typingText}
+          </code>
+          <span className="typing-text"> </span>
+        </pre>
+      </div>
     </div>
   );
 };

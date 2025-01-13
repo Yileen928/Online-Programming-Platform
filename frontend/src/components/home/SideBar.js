@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout, Menu } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeOutlined,
   ProjectOutlined,
@@ -10,62 +10,64 @@ import {
   SettingOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
+import './SideBar.css';
 
 const { Sider } = Layout;
 
-const SideBar = ({ onLogout }) => {
+const SideBar = React.memo(({ onLogout }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const menuItems = [
+  const menuItems = useMemo(() => [
     {
-      key: 'home',
+      key: '/home',
       icon: <HomeOutlined />,
-      label: 'Home',
-      onClick: () => navigate('/home')
+      label: 'Home'
     },
     {
-      key: 'projects',
+      key: '/projects',
       icon: <ProjectOutlined />,
-      label: '项目管理',
-      onClick: () => navigate('/projects')
+      label: '项目管理'
     },
     {
-      key: 'teams',
+      key: '/teams',
       icon: <TeamOutlined />,
-      label: '团队管理',
-      onClick: () => navigate('/teams')
+      label: '团队管理'
     },
     {
-      key: 'datasets',
+      key: '/datasets',
       icon: <DatabaseOutlined />,
-      label: '数据集',
-      onClick: () => navigate('/datasets')
+      label: '数据集'
     },
     {
-      key: 'discussions',
+      key: '/discussions',
       icon: <MessageOutlined />,
-      label: '讨论',
-      onClick: () => navigate('/discussions')
+      label: '讨论'
     },
     {
-      key: 'settings',
+      key: '/settings',
       icon: <SettingOutlined />,
-      label: '设置',
-      onClick: () => navigate('/settings')
+      label: '设置'
     }
-  ];
+  ], []);
+
+  const handleMenuClick = ({ key }) => {
+    if (key !== location.pathname) {
+      navigate(key);
+    }
+  };
 
   return (
-    <Sider className="home-sider" theme="dark" width={200}>
+    <Sider className="home-sider">
       <div className="logo">Logo</div>
       <Menu
         mode="inline"
-        theme="dark"
-        defaultSelectedKeys={['home']}
+        selectedKeys={[location.pathname]}
         items={menuItems}
+        onClick={handleMenuClick}
       />
       <div className="logout-button">
-        <Menu theme="dark" mode="inline">
+        <Menu mode="inline">
           <Menu.Item
             key="logout"
             icon={<LogoutOutlined />}
@@ -77,6 +79,8 @@ const SideBar = ({ onLogout }) => {
       </div>
     </Sider>
   );
-};
+});
+
+SideBar.displayName = 'SideBar';
 
 export default SideBar; 

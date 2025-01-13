@@ -7,8 +7,21 @@ body {
 }
 
 .home-layout {
-  display: flex;
   min-height: 100vh;
+}
+
+.home-header {
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a !important;
+  border-bottom: 1px solid #333;
+}
+
+.home-content {
+  padding: 24px;
+  background: #1a1a1a;
 }
 
 /* 侧边栏 */
