@@ -2,10 +2,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navig
 import { ConfigProvider, theme, Layout } from 'antd';
 import Login from './components/Login';
 import Home from './components/Home';
-<<<<<<< HEAD
-import Register from './components/Register';
-=======
->>>>>>> 3dd847cf4afe6161cab92b3a765936b2358bae95
 import ForgotPassword from './components/ForgotPassword';
 import ProjectManagement from './components/ProjectManagement';
 import DatasetManagement from './components/DatasetManagement';
@@ -82,10 +78,6 @@ function App() {
           {/* 公开路由 */}
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
-<<<<<<< HEAD
-          <Route path="/register" element={<Register />} />
-=======
->>>>>>> 3dd847cf4afe6161cab92b3a765936b2358bae95
           <Route path="/forgot-password" element={<ForgotPassword />} />
           
           {/* 需要登录的路由 */}
