@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Prism from 'prismjs';
@@ -17,6 +17,10 @@ import 'prismjs/plugins/toolbar/prism-toolbar.css';
 import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
+import axios from 'axios';
+
+// 设置基础URL
+axios.defaults.baseURL = 'http://localhost:8080';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -62,9 +66,23 @@ console.log(quickSort(array));`;
     return () => clearInterval(intervalId);
   }, []);
 
-  const onFinish = (values) => {
-    console.log('登录信息:', values);
-    navigate('/home');
+  const onFinish = async (values) => {
+    try {
+      const response = await axios.post('/api/auth/login', values);
+      
+      if (response.data.success) {
+        message.success('登录成功！');
+        localStorage.setItem('token', response.data.token);
+        setTimeout(() => {
+          navigate('/home', { replace: true });
+        }, 1000);
+      } else {
+        message.error(response.data.message || '用户名或密码错误！');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      message.error('登录失败：' + (error.response?.data?.message || '用户名或密码错误'));
+    }
   };
 
   return (

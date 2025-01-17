@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.model.ForgotPasswordRequest;
+import com.example.demo.model.LoginRequest;
+import com.example.demo.model.ApiResponse;
 import com.example.demo.service.UserService;
+import com.example.demo.entity.User;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,5 +48,21 @@ public class AuthController {
         // 生成重置令牌并发送邮件
         userService.sendPasswordResetEmail(request.getEmail());
         return ResponseEntity.ok("重置链接已发送到邮箱");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            User user = userService.verifyUser(loginRequest.getUsername(), loginRequest.getPassword());
+            if (user != null) {
+                // 登录成功，返回一个临时token
+                return ResponseEntity.ok(new ApiResponse(true, "登录成功", "temp-token-123"));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse(false, "用户名或密码错误"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(false, "登录失败：" + e.getMessage()));
+        }
     }
 }
