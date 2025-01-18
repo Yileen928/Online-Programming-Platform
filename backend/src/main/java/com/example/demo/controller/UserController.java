@@ -26,32 +26,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            log.info("Login request received - username: {}, password: {}", 
-                loginRequest.getUsername(), loginRequest.getPassword());
-            
-            User user = userService.verifyUser(loginRequest.getUsername(), loginRequest.getPassword());
-            
-            if (user != null) {
-                log.info("Login successful for user: {}", loginRequest.getUsername());
-                LoginResponse response = new LoginResponse();
-                response.setToken("fake-jwt-token");
-                response.setMessage("登录成功");
-                return ResponseEntity.ok(response);
-            }
-            
-            log.warn("Login failed for user: {}", loginRequest.getUsername());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new LoginResponse("用户名或密码错误"));
-        } catch (Exception e) {
-            log.error("Login error for user: " + loginRequest.getUsername(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new LoginResponse("登录失败: " + e.getMessage()));
-        }
-    }
-
     @GetMapping("/recent-projects")
     public ResponseEntity<?> getRecentProjects() {
         try {
