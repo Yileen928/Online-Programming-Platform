@@ -112,24 +112,6 @@ public class UserController {
 }
 
 @Data
-class LoginRequest {
-    private String username;
-    private String password;
-}
-
-@Data
-class LoginResponse {
-    private String token;
-    private String message;
-
-    public LoginResponse() {}
-
-    public LoginResponse(String message) {
-        this.message = message;
-    }
-}
-
-@Data
 class ErrorResponse {
     private String message;
 
