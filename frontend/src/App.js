@@ -9,6 +9,7 @@ import TeamManagement from './components/TeamManagement';
 import SideBar from './components/SideBar';
 import { useEffect } from 'react';
 import './styles/prism-theme.css';
+import './styles/github.css';
 
 const { Content } = Layout;
 

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Select, Radio, Button, Tabs, Card } from 'antd';
+import { Input, Select, Radio, Button, Tabs, Card, Row, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { userApi } from '../api/user';
+import GitHubConnect from './github/GitHubConnect';
+import RepoList from './github/RepoList';
+import CreateRepo from './github/CreateRepo';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -13,6 +16,7 @@ const Home = () => {
   const [projectName, setProjectName] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [recentProjects, setRecentProjects] = useState([]);
+  const repoListRef = React.useRef();
 
   useEffect(() => {
     fetchRecentProjects();
@@ -24,6 +28,12 @@ const Home = () => {
       setRecentProjects(response || []);
     } catch (error) {
       console.error('获取最近项目失败:', error);
+    }
+  };
+
+  const handleGitHubConnect = () => {
+    if (repoListRef.current) {
+      repoListRef.current.fetchRepos();
     }
   };
 
@@ -75,7 +85,21 @@ const Home = () => {
     {
       key: 'github',
       label: '从GitHub上拉取',
-      children: <div>GitHub导入功能</div>,
+      children: (
+        <div className="github-content">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <GitHubConnect onConnectSuccess={handleGitHubConnect} />
+            </Col>
+            <Col span={12}>
+              <CreateRepo />
+            </Col>
+            <Col span={24}>
+              <RepoList ref={repoListRef} />
+            </Col>
+          </Row>
+        </div>
+      ),
     },
   ];
 
