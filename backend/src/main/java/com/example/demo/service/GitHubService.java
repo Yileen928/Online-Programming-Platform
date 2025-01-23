@@ -163,7 +163,6 @@ public class GitHubService {
             if (github == null) {
                 throw new RuntimeException("请先连接GitHub");
             }
-            // TODO: 实现导入逻辑
             log.info("Importing repository: {}", repoId);
         } catch (Exception e) {
             log.error("Failed to import repository", e);

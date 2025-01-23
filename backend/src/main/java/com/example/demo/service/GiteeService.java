@@ -118,7 +118,6 @@ public class GiteeService {
             }
             String cloneUrl = (String) repoInfo.get("clone_url");
             
-            // TODO: 实现克隆仓库的逻辑
             log.info("Importing Gitee repository: {} ({})", repoInfo.get("full_name"), cloneUrl);
             
         } catch (Exception e) {

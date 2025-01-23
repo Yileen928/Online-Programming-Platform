@@ -1,25 +1,27 @@
 package com.example.demo.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.model.ForgotPasswordRequest;
-import com.example.demo.model.LoginRequest;
-import com.example.demo.model.ApiResponse;
 import com.example.demo.service.UserService;
-import com.example.demo.entity.User;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.service.AuthService;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
+@RequiredArgsConstructor
 public class AuthController {
-    @Autowired
-    private UserService userService;
+    private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -51,18 +53,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            User user = userService.verifyUser(loginRequest.getUsername(), loginRequest.getPassword());
-            if (user != null) {
-                // 登录成功，返回一个临时token
-                return ResponseEntity.ok(new ApiResponse(true, "登录成功", "temp-token-123"));
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ApiResponse(false, "用户名或密码错误"));
+            log.info("Received login request for user: {}", request.getUsername());
+            String token = authService.login(request.getUsername(), request.getPassword());
+            log.info("Login successful for user: {}", request.getUsername());
+            return ResponseEntity.ok(Map.of(
+                "token", token,
+                "message", "登录成功"
+            ));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse(false, "登录失败：" + e.getMessage()));
+            log.error("Login failed for user: {}", request.getUsername(), e);
+            return ResponseEntity.badRequest().body(Map.of(
+                "message", e.getMessage(),
+                "error", true
+            ));
         }
     }
 }

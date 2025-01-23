@@ -18,6 +18,7 @@ import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
 import axios from 'axios';
+import { userApi } from '../api/user';
 
 // 设置基础URL
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -66,22 +67,26 @@ console.log(quickSort(array));`;
     return () => clearInterval(intervalId);
   }, []);
 
-  const onFinish = async (values) => {
+  const handleLogin = async (values) => {
     try {
-      const response = await axios.post('/api/auth/login', values);
+      console.log('Attempting login with values:', values);
+      const response = await userApi.login(values);
+      console.log('Login response:', response);
       
-      if (response.data.success) {
-        message.success('登录成功！');
-        localStorage.setItem('token', response.data.token);
+      if (response && response.token) {
+        console.log('Storing token:', response.token);
+        localStorage.setItem('token', response.token);
+        message.success(response.message || '登录成功！');
         setTimeout(() => {
-          navigate('/home', { replace: true });
+          navigate('/home');
         }, 1000);
       } else {
-        message.error(response.data.message || '用户名或密码错误！');
+        console.error('No token in response:', response);
+        message.error('登录失败：响应中没有token');
       }
     } catch (error) {
       console.error('Login error:', error);
-      message.error('登录失败：' + (error.response?.data?.message || '用户名或密码错误'));
+      message.error('登录失败：' + (error.response?.data?.message || '未知错误'));
     }
   };
 
@@ -93,7 +98,7 @@ console.log(quickSort(array));`;
           <div className='login-input'>
           <Form
             name="login"
-            onFinish={onFinish}
+            onFinish={handleLogin}
             autoComplete="off"
           >
             <Form.Item

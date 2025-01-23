@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { ConfigProvider, theme, Layout } from 'antd';
+import { ConfigProvider, theme, Layout, App as AntApp } from 'antd';
 import Login from './components/Login';
 import Home from './components/Home';
 import ForgotPassword from './components/ForgotPassword';
@@ -10,6 +10,7 @@ import SideBar from './components/SideBar';
 import { useEffect } from 'react';
 import './styles/prism-theme.css';
 import './styles/github.css';
+import Editor from './pages/Editor';
 
 const { Content } = Layout;
 
@@ -73,51 +74,54 @@ const MainLayout = ({ children }) => {
 
 function App() {
   return (
-    <ConfigProvider theme={darkTheme}>
-      <Router>
-        <Routes>
-          {/* 公开路由 */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          
-          {/* 需要登录的路由 */}
-          <Route path="/home" element={
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          } />
-          <Route path="/projects" element={
-            <MainLayout>
-              <ProjectManagement />
-            </MainLayout>
-          } />
-          <Route path="/datasets" element={
-            <MainLayout>
-              <DatasetManagement />
-            </MainLayout>
-          } />
-          <Route path="/teams" element={
-            <MainLayout>
-              <TeamManagement />
-            </MainLayout>
-          } />
-          <Route path="/discussions" element={
-            <MainLayout>
-              <div>讨论页面</div>
-            </MainLayout>
-          } />
-          <Route path="/settings" element={
-            <MainLayout>
-              <div>设置页面</div>
-            </MainLayout>
-          } />
-          
-          {/* 404 页面 */}
-          <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
-      </Router>
-    </ConfigProvider>
+    <AntApp>
+      <ConfigProvider theme={darkTheme}>
+        <Router>
+          <Routes>
+            {/* 公开路由 */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            
+            {/* 需要登录的路由 */}
+            <Route path="/home" element={
+              <MainLayout>
+                <Home />
+              </MainLayout>
+            } />
+            <Route path="/projects" element={
+              <MainLayout>
+                <ProjectManagement />
+              </MainLayout>
+            } />
+            <Route path="/datasets" element={
+              <MainLayout>
+                <DatasetManagement />
+              </MainLayout>
+            } />
+            <Route path="/teams" element={
+              <MainLayout>
+                <TeamManagement />
+              </MainLayout>
+            } />
+            <Route path="/discussions" element={
+              <MainLayout>
+                <div>讨论页面</div>
+              </MainLayout>
+            } />
+            <Route path="/settings" element={
+              <MainLayout>
+                <div>设置页面</div>
+              </MainLayout>
+            } />
+            <Route path="/editor/:projectId" element={<Editor />} />
+            
+            {/* 404 页面 */}
+            <Route path="*" element={<Navigate to="/home" replace />} />
+          </Routes>
+        </Router>
+      </ConfigProvider>
+    </AntApp>
   );
 }
 

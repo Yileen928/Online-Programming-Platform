@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 日志文件 ###
+*.log
+logs/
+
+### 配置文件 ###
+application-*.properties
+!application.properties
+
+### 其他 ###
+.DS_Store

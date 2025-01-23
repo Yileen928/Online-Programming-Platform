@@ -1,10 +1,15 @@
 import request from './request';
+import axios from 'axios';
 
 export const userApi = {
   // 用户登录
-  login: async (data) => {
-    const response = await request.post('/api/user/login', data);
-    return response;  // request.js 的拦截器已经处理了 response.data
+  login: (data) => {
+    console.log('Sending login request with data:', data);
+    return request({
+      url: '/api/auth/login',  // 修改为正确的路径
+      method: 'post',
+      data
+    });
   },
 
   // 获取用户信息
@@ -85,5 +90,17 @@ export const userApi = {
         .catch((error) => {
           throw error.response?.data || { message: '认证状态检查失败' };
         });
-  }
+  },
+
+  createProject: async (projectData) => {
+    try {
+      console.log('Creating project with data:', projectData);
+      const response = await request.post('/api/projects', projectData);
+      console.log('Project creation response:', response);
+      return response;
+    } catch (error) {
+      console.error('Project creation error:', error);
+      throw error;
+    }
+  },
 };

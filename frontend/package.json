@@ -3,22 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^5.5.2",
-    "@fontsource/press-start-2p": "^5.1.1",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "antd": "^5.23.0",
-    "axios": "^1.7.9",
-    "cors": "^2.8.5",
-    "cra-template": "1.2.0",
-    "prismjs": "^1.29.0",
+    "@monaco-editor/react": "^4.6.0",
+    "antd": "^5.x.x",
+    "@ant-design/icons": "^5.x.x",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.28.1",
-    "react-scripts": "^5.0.1",
-    "styled-components": "^6.1.14",
-    "web-vitals": "^2.1.4"
+    "react-router-dom": "^6.x.x"
   },
   "scripts": {
     "start": "react-scripts start",

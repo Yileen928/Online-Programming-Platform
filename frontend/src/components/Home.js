@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input, Select, Radio, Button, Tabs, Card, Row, Col } from 'antd';
+import { Input, Select, Radio, Button, Tabs, Card, Row, Col, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { userApi } from '../api/user';
@@ -52,6 +52,40 @@ const Home = () => {
     }
   };
 
+  const handleCreateProject = async () => {
+    if (!selectedTemplate) {
+      message.error('请选择一个模板');
+      return;
+    }
+    if (!projectName.trim()) {
+      message.error('请输入项目标题');
+      return;
+    }
+
+    try {
+      // 创建项目的 API 调用
+      const response = await userApi.createProject({
+        template: selectedTemplate,
+        name: projectName,
+        isPublic: isPublic
+      });
+
+      if (response && response.projectId) {
+        message.success('项目创建成功');
+        // 跳转到编译器页面，并传递项目ID
+        navigate(`/editor/${response.projectId}`, {
+          state: {
+            template: selectedTemplate,
+            projectName: projectName
+          }
+        });
+      }
+    } catch (error) {
+      console.error('创建项目失败:', error);
+      message.error('创建项目失败，请重试');
+    }
+  };
+
   const items = [
     {
       key: 'template',
@@ -91,6 +125,8 @@ const Home = () => {
           <Button 
             type="primary" 
             className="create-button"
+            onClick={handleCreateProject}
+            disabled={!selectedTemplate || !projectName.trim()}
           >
             CODE
           </Button>
