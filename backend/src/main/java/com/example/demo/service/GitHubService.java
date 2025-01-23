@@ -85,8 +85,6 @@ public class GitHubService {
                 .map(ghRepo -> {
                     try {
                         Repository repo = convertToRepository(ghRepo);
-                        repo.setType(ghRepo.getOwnerName().equals(myself.getLogin()) ? 
-                            "owner" : "collaborator");
                         return repo;
                     } catch (IOException e) {
                         log.error("Failed to convert repository: {}", ghRepo.getFullName(), e);
@@ -123,12 +121,39 @@ public class GitHubService {
             if (github == null) {
                 throw new RuntimeException("请先连接GitHub");
             }
-            GHRepository ghRepo = github.createRepository(request.getName())
-                .description(request.getDescription())
-                .create();
-            return convertToRepository(ghRepo);
+
+            log.info("Creating repository with params: name={}, description={}, private={}", 
+                request.getName(), request.getDescription(), request.isPrivate());
+
+            GHCreateRepositoryBuilder builder = github.createRepository(request.getName());
+            
+            // 设置描述（如果有）
+            if (request.getDescription() != null) {
+                builder.description(request.getDescription());
+            }
+            
+            // 明确设置可见性
+            builder.private_(request.isPrivate());
+            
+            // 创建仓库
+            GHRepository ghRepo = builder.create();
+            
+            log.info("Repository created: {} (private: {})", 
+                ghRepo.getFullName(), ghRepo.isPrivate());
+
+            // 转换为响应对象
+            Repository repo = new Repository();
+            repo.setId(String.valueOf(ghRepo.getId()));
+            repo.setName(ghRepo.getFullName());
+            repo.setDescription(ghRepo.getDescription());
+            repo.setUrl(ghRepo.getHtmlUrl().toString());
+            repo.setPrivate(ghRepo.isPrivate());
+            repo.setOwner(ghRepo.getOwnerName());
+            repo.setFork(false);
+            
+            return repo;
         } catch (IOException e) {
-            log.error("Failed to create repository", e);
+            log.error("Failed to create repository: {}", e.getMessage(), e);
             throw new RuntimeException("创建仓库失败: " + e.getMessage());
         }
     }
@@ -155,6 +180,7 @@ public class GitHubService {
         repo.setPrivate(ghRepo.isPrivate());
         repo.setOwner(ghRepo.getOwnerName());
         repo.setFork(ghRepo.isFork());
+        repo.setType(ghRepo.getOwnerName().equals(github.getMyself().getLogin()) ? "owner" : "collaborator");
         return repo;
     }
 

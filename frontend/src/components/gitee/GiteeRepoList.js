@@ -70,6 +70,32 @@ const GiteeRepoList = forwardRef((props, ref) => {
     fetchRepos(1, true);
   }, []);
 
+  const renderRepo = (repo) => (
+    <List.Item key={repo.id}>
+      <Card style={{ width: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h4>{repo.name}</h4>
+            <p>{repo.description || '暂无描述'}</p>
+            <div>
+              <Tag color={repo.private ? 'red' : 'green'}>
+                {repo.private ? '私有' : '公开'}
+              </Tag>
+              {repo.fork && <Tag color="orange">Fork</Tag>}
+            </div>
+          </div>
+          <Button 
+            type="primary" 
+            icon={<ImportOutlined />}
+            onClick={() => handleImport(repo.id)}
+          >
+            导入
+          </Button>
+        </div>
+      </Card>
+    </List.Item>
+  );
+
   return (
     <div style={{ height: 'calc(100vh - 300px)', backgroundColor: '#1e1e1e', padding: '20px' }}>
       <div style={{ 
@@ -107,55 +133,7 @@ const GiteeRepoList = forwardRef((props, ref) => {
         <List
           dataSource={repos}
           split={false}
-          renderItem={repo => (
-            <List.Item
-              style={{
-                backgroundColor: '#2d2d2d',
-                marginBottom: '10px',
-                padding: '16px',
-                borderRadius: '8px',
-              }}
-              actions={[
-                <Button 
-                  type="primary"
-                  icon={<ImportOutlined />}
-                  onClick={() => handleImport(repo.id)}
-                >
-                  导入
-                </Button>
-              ]}
-            >
-              <List.Item.Meta
-                avatar={<GithubOutlined style={{ 
-                  color: repo.private ? '#f56a00' : '#1890ff',
-                  fontSize: '20px'
-                }} />}
-                title={
-                  <div>
-                    <a 
-                      href={repo.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      style={{ color: '#1890ff' }}
-                    >
-                      {repo.name}
-                    </a>
-                    {repo.private && 
-                      <Tag color="orange" style={{ marginLeft: 8 }}>私有</Tag>
-                    }
-                  </div>
-                }
-                description={
-                  <div style={{ color: '#8b949e' }}>
-                    <div>{repo.description || '暂无描述'}</div>
-                    <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                      所有者: {repo.owner}
-                    </div>
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
+          renderItem={renderRepo}
         />
         {loading && (
           <div style={{ textAlign: 'center', padding: '20px', color: '#8b949e' }}>

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import com.example.demo.model.Repository;
+import com.example.demo.model.CreateRepoRequest;
 
 @RestController
 @RequestMapping("/api/gitee")
@@ -67,6 +68,20 @@ public class GiteeController {
             return ResponseEntity.ok(new ApiResponse(true, "仓库导入成功"));
         } catch (Exception e) {
             log.error("Failed to import Gitee repository: {}", e.getMessage());
+            return ResponseEntity.badRequest()
+                .body(new ApiResponse(false, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/repos")
+    public ResponseEntity<?> createRepository(@RequestBody CreateRepoRequest request) {
+        try {
+            log.info("Creating Gitee repository: {}", request.getName());
+            Repository repo = giteeService.createRepository(request);
+            log.info("Successfully created Gitee repository: {}", repo.getName());
+            return ResponseEntity.ok(repo);
+        } catch (Exception e) {
+            log.error("Failed to create Gitee repository: {}", e.getMessage(), e);
             return ResponseEntity.badRequest()
                 .body(new ApiResponse(false, e.getMessage()));
         }

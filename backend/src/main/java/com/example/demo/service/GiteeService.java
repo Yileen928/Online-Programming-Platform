@@ -10,6 +10,8 @@ import org.springframework.http.*;
 import java.util.*;
 import org.springframework.core.ParameterizedTypeReference;
 import java.util.stream.Collectors;
+import org.springframework.http.MediaType;
+import com.example.demo.model.CreateRepoRequest;
 
 @Service
 @Component
@@ -150,6 +152,61 @@ public class GiteeService {
         } catch (Exception e) {
             log.error("Failed to get total repository count: {}", e.getMessage());
             throw new RuntimeException("获取仓库总数失败: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Repository createRepository(CreateRepoRequest request) {
+        try {
+            if (token == null) {
+                throw new RuntimeException("请先连接Gitee");
+            }
+
+            HttpHeaders headers = createHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("name", request.getName());
+            body.put("description", request.getDescription());
+            body.put("private", request.isPrivate());
+            body.put("auto_init", true);
+            body.put("has_issues", true);
+            body.put("has_wiki", true);
+            
+            log.info("Creating repository with settings: name={}, private={}", 
+                request.getName(), request.isPrivate());
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+            
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                GITEE_API_URL + "/user/repos",
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+
+            Map<String, Object> repoData = response.getBody();
+            if (repoData == null) {
+                throw new RuntimeException("创建仓库失败：返回数据为空");
+            }
+
+            // 打印响应数据以便调试
+            log.info("Repository created successfully. Response: {}", repoData);
+
+            Repository repo = new Repository();
+            repo.setId(String.valueOf(repoData.get("id")));
+            repo.setName((String) repoData.get("full_name"));
+            repo.setDescription((String) repoData.get("description"));
+            repo.setUrl((String) repoData.get("html_url"));
+            repo.setPrivate((Boolean) repoData.get("private"));
+            Map<String, Object> owner = (Map<String, Object>) repoData.get("owner");
+            repo.setOwner((String) owner.get("login"));
+            repo.setFork(false);
+
+            return repo;
+        } catch (Exception e) {
+            log.error("Failed to create Gitee repository: {}", e.getMessage());
+            throw new RuntimeException("创建Gitee仓库失败: " + e.getMessage());
         }
     }
 

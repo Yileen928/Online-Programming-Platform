@@ -8,6 +8,7 @@ import RepoList from './github/RepoList';
 import CreateRepo from './github/CreateRepo';
 import GiteeConnect from '../components/gitee/GiteeConnect';
 import GiteeRepoList from '../components/gitee/GiteeRepoList';
+import CreateGiteeRepo from '../components/gitee/CreateGiteeRepo';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -106,11 +107,11 @@ const Home = () => {
               {!githubConnected ? (
                 <GitHubConnect onConnectSuccess={handleGitHubConnect} />
               ) : (
-                <RepoList ref={githubRepoListRef} />
+                <>
+                  <CreateRepo onSuccess={() => githubRepoListRef.current?.fetchRepos()} />
+                  <RepoList ref={githubRepoListRef} />
+                </>
               )}
-            </Col>
-            <Col span={12}>
-              <CreateRepo />
             </Col>
           </Row>
         </div>
@@ -124,7 +125,10 @@ const Home = () => {
           {!giteeConnected ? (
             <GiteeConnect onConnectSuccess={handleGiteeConnect} />
           ) : (
-            <GiteeRepoList ref={giteeRepoListRef} />
+            <>
+              <CreateGiteeRepo onSuccess={() => giteeRepoListRef.current?.fetchRepos()} />
+              <GiteeRepoList ref={giteeRepoListRef} />
+            </>
           )}
         </div>
       ),
