@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input, Select, Radio, Button, Tabs, Card, Row, Col } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
@@ -6,6 +6,8 @@ import { userApi } from '../api/user';
 import GitHubConnect from './github/GitHubConnect';
 import RepoList from './github/RepoList';
 import CreateRepo from './github/CreateRepo';
+import GiteeConnect from '../components/gitee/GiteeConnect';
+import GiteeRepoList from '../components/gitee/GiteeRepoList';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -17,6 +19,10 @@ const Home = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [recentProjects, setRecentProjects] = useState([]);
   const repoListRef = React.useRef();
+  const [githubConnected, setGithubConnected] = useState(false);
+  const [giteeConnected, setGiteeConnected] = useState(false);
+  const githubRepoListRef = useRef();
+  const giteeRepoListRef = useRef();
 
   useEffect(() => {
     fetchRecentProjects();
@@ -32,8 +38,16 @@ const Home = () => {
   };
 
   const handleGitHubConnect = () => {
-    if (repoListRef.current) {
-      repoListRef.current.fetchRepos();
+    setGithubConnected(true);
+    if (githubRepoListRef.current) {
+      githubRepoListRef.current.fetchRepos();
+    }
+  };
+
+  const handleGiteeConnect = () => {
+    setGiteeConnected(true);
+    if (giteeRepoListRef.current) {
+      giteeRepoListRef.current.fetchRepos();
     }
   };
 
@@ -89,15 +103,29 @@ const Home = () => {
         <div className="github-content">
           <Row gutter={[16, 16]}>
             <Col span={24}>
-              <GitHubConnect onConnectSuccess={handleGitHubConnect} />
+              {!githubConnected ? (
+                <GitHubConnect onConnectSuccess={handleGitHubConnect} />
+              ) : (
+                <RepoList ref={githubRepoListRef} />
+              )}
             </Col>
             <Col span={12}>
               <CreateRepo />
             </Col>
-            <Col span={24}>
-              <RepoList ref={repoListRef} />
-            </Col>
           </Row>
+        </div>
+      ),
+    },
+    {
+      key: 'gitee',
+      label: '从Gitee上拉取',
+      children: (
+        <div className="gitee-content">
+          {!giteeConnected ? (
+            <GiteeConnect onConnectSuccess={handleGiteeConnect} />
+          ) : (
+            <GiteeRepoList ref={giteeRepoListRef} />
+          )}
         </div>
       ),
     },
