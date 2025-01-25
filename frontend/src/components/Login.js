@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import Prism from 'prismjs';
@@ -17,6 +17,8 @@ import 'prismjs/plugins/toolbar/prism-toolbar.css';
 import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
+import { userApi } from '../api/user';
+import { useMessage } from '../hooks/useMessage';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,6 +44,8 @@ const Login = () => {
 const array = [64, 34, 25, 12, 22, 11, 90];
 console.log(quickSort(array));`;
 
+  const messageApi = useMessage();
+
   useEffect(() => {
     let currentIndex = 0;
     const intervalId = setInterval(() => {
@@ -62,9 +66,18 @@ console.log(quickSort(array));`;
     return () => clearInterval(intervalId);
   }, []);
 
-  const onFinish = (values) => {
-    console.log('登录信息:', values);
-    navigate('/home');
+  const handleSubmit = async (values) => {
+    try {
+      const response = await userApi.login(values);
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('userId', response.userId);
+        messageApi.success('登录成功');
+        navigate('/home');
+      }
+    } catch (error) {
+      messageApi.error(error.message || '登录失败');
+    }
   };
 
   return (
@@ -75,7 +88,7 @@ console.log(quickSort(array));`;
           <div className='login-input'>
           <Form
             name="login"
-            onFinish={onFinish}
+            onFinish={handleSubmit}
             autoComplete="off"
           >
             <Form.Item
