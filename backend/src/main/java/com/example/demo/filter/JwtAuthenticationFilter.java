@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.springframework.lang.NonNull;
+import io.jsonwebtoken.Claims;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -31,11 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             try {
-                String username = jwtUtil.extractUsername(token);
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        username, null, new ArrayList<>());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                if (jwtUtil.validateToken(token)) {
+                    Long userId = jwtUtil.getUserIdFromToken(token);
+                    String username = jwtUtil.extractUsername(token);
+                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                            username, null, new ArrayList<>());
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();

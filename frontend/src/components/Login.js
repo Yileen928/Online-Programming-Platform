@@ -17,6 +17,8 @@ import 'prismjs/plugins/toolbar/prism-toolbar.css';
 import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
 import './Login.css';
+import { userApi } from '../api/user';
+import { useMessage } from '../hooks/useMessage';
 import axios from 'axios';
 
 // 设置基础URL
@@ -46,95 +48,97 @@ const Login = () => {
 const array = [64, 34, 25, 12, 22, 11, 90];
 console.log(quickSort(array));`;
 
-  useEffect(() => {
-    let currentIndex = 0;
-    const intervalId = setInterval(() => {
-      if (currentIndex < codeExample.length) {
-        setTypingText(prev => {
-          const newText = prev + codeExample[currentIndex];
-          setTimeout(() => {
-            Prism.highlightAll();
-          }, 0);
-          return newText;
-        });
-        currentIndex++;
-      } else {
-        clearInterval(intervalId);
-      }
-    }, 50);
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
-    return () => clearInterval(intervalId);
+  useEffect(() => {
+    localStorage.removeItem('token');
   }, []);
 
   const onFinish = async (values) => {
     try {
-      const response = await axios.post('/api/auth/login', values);
+      setLoading(true);
+      const response = await userApi.login(values);
       
-      if (response.data.success) {
-        message.success('登录成功！');
-        localStorage.setItem('token', response.data.token);
-        setTimeout(() => {
-          navigate('/home', { replace: true });
-        }, 1000);
+      if (response?.token) {
+        localStorage.setItem('token', response.token);
+        messageApi.success('登录成功');
+        
+        // 检查是否有重定向路径
+        const redirectPath = localStorage.getItem('redirectPath');
+        if (redirectPath) {
+          localStorage.removeItem('redirectPath');
+          navigate(redirectPath);
+        } else {
+          navigate('/home');
+        }
       } else {
-        message.error(response.data.message || '用户名或密码错误！');
+        throw new Error('登录失败：服务器返回数据格式错误');
       }
     } catch (error) {
-      console.error('Login error:', error);
-      message.error('登录失败：' + (error.response?.data?.message || '用户名或密码错误'));
+      console.error('登录失败:', error);
+      messageApi.error(error.message || '登录失败，请重试');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-container">
+      {contextHolder}
       <div className="login-section">
         <div className="login-form-container">
           <div className="logo" alt="logo" > </div>
           <div className='login-input'>
           <Form
+            form={form}
             name="login"
             onFinish={onFinish}
             autoComplete="off"
           >
             <Form.Item
               name="username"
-              rules={[{ required: true, message: '请输入用户名!' }]}
+              rules={[{ required: true, message: '请输入用户名' }]}
             >
               <Input 
                 prefix={<UserOutlined />} 
                 placeholder="用户名" 
                 size="large"
+                autoComplete="username"
               />
             </Form.Item>
 
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: '请输入密码!' }]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="密码"
-                size="large"
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit"
-                className="login-button"
-                size="large"
+              <Form.Item
+                name="password"
+                rules={[{ required: true, message: '请输入密码' }]}
               >
-                登录
-              </Button>
-            </Form.Item>
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="密码"
+                  size="large"
+                  autoComplete="current-password"
+                />
+              </Form.Item>
 
-            <div className="login-links">
-              <Link to="/forgot-password">忘记密码？</Link>
-            </div>
-          </Form>
+              <Form.Item>
+                <Button 
+                  type="primary" 
+                  htmlType="submit" 
+                  block 
+                  size="large"
+                  loading={loading}
+                >
+                  登录
+                </Button>
+              </Form.Item>
+
+              <div className="login-links">
+                <Link to="/forgot-password">忘记密码？</Link>
+                <Link to="/register">注册账号</Link>
+              </div>
+            </Form>
           </div>
-          
         </div>
       </div>
       

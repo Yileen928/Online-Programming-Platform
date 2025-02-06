@@ -2,14 +2,11 @@ import axios from 'axios';
 
 // 创建axios实例
 const request = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:8080' 
-    : 'https://api.example.com',
-  timeout: 5000,
+  baseURL: 'http://localhost:8080', // 后端接口的基础URL
+  timeout: 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json'
-  },
-  withCredentials: false
+  }
 });
 
 // 请求拦截器
@@ -28,13 +25,15 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
-  response => {
-    return response.data;  // 直接返回响应数据
-  },
+  response => response,
   error => {
-    console.error('请求错误:', error);
-    throw error?.response?.data || error;
+    if (error.response?.status === 403) {
+      // token过期或无效
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
   }
 );
 
-export default request;
+export default request; 

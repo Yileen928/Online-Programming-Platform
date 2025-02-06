@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { ConfigProvider, theme, Layout } from 'antd';
+import { ConfigProvider, theme, Layout, message } from 'antd';
 import Login from './components/Login';
 import Home from './components/Home';
 import ForgotPassword from './components/ForgotPassword';
@@ -7,9 +7,11 @@ import ProjectManagement from './components/ProjectManagement';
 import DatasetManagement from './components/DatasetManagement';
 import TeamManagement from './components/TeamManagement';
 import SideBar from './components/SideBar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './styles/prism-theme.css';
 import './styles/github.css';
+import { MessageContext } from './contexts/MessageContext';
+import { userApi } from './api/user';
 
 const { Content } = Layout;
 
@@ -20,20 +22,19 @@ const darkTheme = {
     colorBgContainer: '#1a1a1a',
     colorBgElevated: '#2a2a2a',
     colorText: '#fff',
-    colorBgLayout: '#1a1a1a',
-    colorBorder: '#333',
+    bodyBg: '#1a1a1a',
     borderRadius: 8,
   },
   components: {
     Menu: {
-      colorItemBg: '#1a1a1a',
-      colorItemText: '#fff',
-      colorItemTextSelected: '#fff',
-      colorItemBgSelected: '#2a2a2a',
+      itemBg: '#1a1a1a',
+      itemColor: '#fff',
+      itemSelectedColor: '#fff',
+      itemSelectedBg: '#2a2a2a',
     },
     Layout: {
-      colorBgHeader: '#1a1a1a',
-      colorBgBody: '#1a1a1a',
+      headerBg: '#1a1a1a',
+      bodyBg: '#1a1a1a',
     },
     Input: {
       colorBgContainer: '#2a2a2a',
@@ -48,17 +49,6 @@ const darkTheme = {
 
 // 创建一个布局组件来包装需要导航栏的页面
 const MainLayout = ({ children }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // 检查登录状态
-    const token = localStorage.getItem('token');
-    if (!token && location.pathname !== '/login') {
-      navigate('/login');
-    }
-  }, [location, navigate]);
-
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <SideBar />
@@ -71,52 +61,115 @@ const MainLayout = ({ children }) => {
   );
 };
 
+const PrivateRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [messageApi] = message.useMessage();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('未登录');
+        }
+        
+        const response = await userApi.checkAuth();
+        if (response?.valid) {
+          setIsAuthenticated(true);
+        } else {
+          throw new Error('认证失败');
+        }
+      } catch (error) {
+        console.error('认证失败:', error);
+        localStorage.removeItem('token');
+        messageApi.error('请先登录');
+        navigate('/login', { 
+          state: { from: location },
+          replace: true 
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [navigate, location, messageApi]);
+
+  if (isLoading) {
+    return <div>加载中...</div>;
+  }
+
+  return isAuthenticated ? children : null;
+};
+
 function App() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     <ConfigProvider theme={darkTheme}>
-      <Router>
-        <Routes>
-          {/* 公开路由 */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          
-          {/* 需要登录的路由 */}
-          <Route path="/home" element={
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          } />
-          <Route path="/projects" element={
-            <MainLayout>
-              <ProjectManagement />
-            </MainLayout>
-          } />
-          <Route path="/datasets" element={
-            <MainLayout>
-              <DatasetManagement />
-            </MainLayout>
-          } />
-          <Route path="/teams" element={
-            <MainLayout>
-              <TeamManagement />
-            </MainLayout>
-          } />
-          <Route path="/discussions" element={
-            <MainLayout>
-              <div>讨论页面</div>
-            </MainLayout>
-          } />
-          <Route path="/settings" element={
-            <MainLayout>
-              <div>设置页面</div>
-            </MainLayout>
-          } />
-          
-          {/* 404 页面 */}
-          <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
-      </Router>
+      <MessageContext.Provider value={messageApi}>
+        {contextHolder}
+        <Router>
+          <Routes>
+            {/* 根路由重定向到登录页面 */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            
+            {/* 公开路由 */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            
+            {/* 受保护的路由 */}
+            <Route path="/home" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <Home />
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/projects" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <ProjectManagement />
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/datasets" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <DatasetManagement />
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/teams" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <TeamManagement />
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/discussions" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <div>讨论页面</div>
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/settings" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <div>设置页面</div>
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            
+            {/* 404 路由重定向到登录页面 */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </Router>
+      </MessageContext.Provider>
     </ConfigProvider>
   );
 }

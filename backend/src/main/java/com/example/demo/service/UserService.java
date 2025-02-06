@@ -3,9 +3,11 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 import com.example.demo.model.RegisterRequest;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,12 @@ public class UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * 验证用户的用户名和密码。
@@ -173,5 +181,17 @@ public class UserService {
         user.setResetToken(null);
         user.setResetTokenExpiry(null);
         userRepository.save(user);
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public String login(String username, String password) {
+        User user = verifyUser(username, password);
+        if (user == null) {
+            throw new RuntimeException("用户名或密码错误");
+        }
+        return jwtUtil.generateToken(user.getId(), user.getUsername());
     }
 }

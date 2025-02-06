@@ -1,63 +1,106 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.User;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "your_secret_key_your_secret_key_your_secret_key"; // 最少256位 (32字符以上)
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10小时
+    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    @Value("${jwt.secret}")
+    private String secret;
 
-    // 生成 JWT Token
-    public String generateToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", user.getUsername());
-        claims.put("email", user.getEmail());
-        return createToken(claims, user.getUsername());
-    }
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setClaims(claims) // 设置自定义字段
-                .setSubject(subject) // 设置主体，比如用户名
-                .setIssuedAt(new Date()) // 签发时间
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 设置过期时间
-                .signWith(key, SignatureAlgorithm.HS256) // 设置密钥和签名算法
-                .compact();
-    }
-
-    // 验证和解析 JWT Token
-    public Claims validateToken(String token) {
+    public String generateToken(Long userId, String username) {
         try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key) // 设置密钥
-                    .build()
-                    .parseClaimsJws(token) // 解析 Token
-                    .getBody();
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new RuntimeException("JWT Token 无效或已过期");
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", userId);
+            claims.put("username", username);
+            
+            String token = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS512)
+                .compact();
+            
+            log.debug("生成的token: {}", token);
+            return token;
+        } catch (Exception e) {
+            log.error("生成token失败", e);
+            throw new RuntimeException("生成token失败", e);
         }
     }
 
-    // 从 Token 中提取用户名
-    public String extractUsername(String token) {
-        Claims claims = validateToken(token);
-        return claims.getSubject();
+    public Long getUserIdFromToken(String token) {
+        try {
+            log.debug("解析token: {}", token);
+            Claims claims = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+            
+            Long userId = claims.get("userId", Long.class);
+            log.debug("解析到的userId: {}", userId);
+            return userId;
+        } catch (Exception e) {
+            log.error("解析token失败: {}", token, e);
+            throw new RuntimeException("无效的token");
+        }
     }
 
-    // 检查 Token 是否过期
-    public boolean isTokenExpired(String token) {
-        Claims claims = validateToken(token);
-        return claims.getExpiration().before(new Date());
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseClaimsJws(token);
+            return true;
+        } catch (SignatureException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.error("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty: {}", e.getMessage());
+        }
+        return false;
+    }
+
+    public String extractUsername(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+            
+            return claims.get("username", String.class);
+        } catch (Exception e) {
+            log.error("提取用户名失败: {}", e.getMessage());
+            return null;
+        }
     }
 }
