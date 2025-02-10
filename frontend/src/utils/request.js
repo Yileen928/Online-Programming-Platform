@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // 创建axios实例
 const request = axios.create({
-  baseURL: 'http://localhost:8080', // 后端接口的基础URL
-  timeout: 10000, // 请求超时时间
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080',
+  timeout: 15000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json'
   }
@@ -19,16 +19,19 @@ request.interceptors.request.use(
     return config;
   },
   error => {
+    console.error('请求错误:', error);
     return Promise.reject(error);
   }
 );
 
 // 响应拦截器
 request.interceptors.response.use(
-  response => response,
+  response => {
+    return response;
+  },
   error => {
-    if (error.response?.status === 403) {
-      // token过期或无效
+    if (error.response?.status === 401) {
+      // token 过期或无效，重定向到登录页
       localStorage.removeItem('token');
       window.location.href = '/login';
     }

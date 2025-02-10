@@ -12,6 +12,7 @@ import './styles/prism-theme.css';
 import './styles/github.css';
 import { MessageContext } from './contexts/MessageContext';
 import { userApi } from './api/user';
+import ProjectEditor from './pages/ProjectEditor';
 
 const { Content } = Layout;
 
@@ -161,6 +162,13 @@ function App() {
               <PrivateRoute>
                 <MainLayout>
                   <div>设置页面</div>
+                </MainLayout>
+              </PrivateRoute>
+            } />
+            <Route path="/projects/:projectId/editor" element={
+              <PrivateRoute>
+                <MainLayout>
+                  <ProjectEditor />
                 </MainLayout>
               </PrivateRoute>
             } />

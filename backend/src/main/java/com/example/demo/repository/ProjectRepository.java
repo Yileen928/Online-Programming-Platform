@@ -11,4 +11,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByCreatorIdOrderByCreatedAtDesc(@Param("creatorId") Long creatorId);
 
     List<Project> findAllByOrderByCreatedAtDesc();
+
+    List<Project> findByIsPublicTrueOrderByCreatedAtDesc();
 } 

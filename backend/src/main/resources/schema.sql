@@ -64,4 +64,15 @@ CREATE SEQUENCE IF NOT EXISTS projects_id_seq
     CACHE 1;
 
 -- 设置项目表的 id 默认使用序列
-ALTER TABLE projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'); 
+ALTER TABLE projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq');
+
+CREATE TABLE IF NOT EXISTS project_files (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    language VARCHAR(50),
+    content TEXT,
+    project_id BIGINT NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+); 

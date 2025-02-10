@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import com.example.demo.model.ErrorResponse;
 import com.example.demo.model.ProjectRequest;
 import com.example.demo.model.ApiResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.demo.security.CustomUserDetails;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -21,17 +24,22 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping
+    @GetMapping//获取项目列表
     public ResponseEntity<?> getProjects() {
         try {
-            return ResponseEntity.ok(new ApiResponse(true, projectService.getAllProjects(), "获取项目列表成功"));
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
+                Long userId = ((CustomUserDetails) auth.getPrincipal()).getUserId();
+                return ResponseEntity.ok(new ApiResponse(true, projectService.getProjectsByUserId(userId), "获取项目列表成功"));
+            }
+            return ResponseEntity.ok(new ApiResponse(true, projectService.getAllProjects(), "获取公开项目列表成功"));
         } catch (Exception e) {
             log.error("获取项目列表失败", e);
             return ResponseEntity.badRequest().body(new ApiResponse(false, null, "获取项目列表失败: " + e.getMessage()));
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")//更新项目
     public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestBody Project project) {
         try {
             project.setId(id);
@@ -42,8 +50,8 @@ public class ProjectController {
             return ResponseEntity.badRequest().body(new ApiResponse(false, null, "更新项目失败: " + e.getMessage()));
         }
     }
-    
-    @DeleteMapping("/{id}")
+
+    @DeleteMapping("/{id}")//删除项目
     public ResponseEntity<?> deleteProject(@PathVariable Long id) {
         try {
             projectService.deleteProject(id);
@@ -51,6 +59,27 @@ public class ProjectController {
         } catch (Exception e) {
             log.error("删除项目失败", e);
             return ResponseEntity.badRequest().body(new ApiResponse(false, null, "删除项目失败: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping//创建项目
+    public ResponseEntity<?> createProject(@RequestBody ProjectRequest projectRequest, @RequestHeader("Authorization") String token) {
+        try {
+            // 清理 token 字符串
+            String cleanToken = token.replace("Bearer ", "");
+            
+            // 创建项目并绑定用户
+            Project createdProject = projectService.createProject(
+                projectRequest.getName(),
+                projectRequest.getTemplate(),
+                projectRequest.isPublic(),
+                cleanToken
+            );
+            
+            return ResponseEntity.ok(new ApiResponse(true, createdProject, "项目创建成功"));
+        } catch (Exception e) {
+            log.error("创建项目失败", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, "创建项目失败: " + e.getMessage()));
         }
     }
 } 

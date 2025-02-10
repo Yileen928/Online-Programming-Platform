@@ -80,18 +80,25 @@ const Home = () => {
         return;
       }
 
-      const response = await userApi.createProject({
+      const response = await projectApi.createProject({
         name: projectName,
         template: selectedTemplate,
         isPublic: isPublic
       });
 
-      if (response.success) {
+      if (response.data?.success) {
         messageApi.success('项目创建成功');
-        navigate(`/projects/${response.projectId}`);
-        fetchRecentProjects();
+        // 创建成功后直接导航到编辑器页面
+        navigate(`/projects/${response.data.data.id}/editor`);
+        // 重置表单
+        setProjectName('');
+        setSelectedTemplate(null);
+        setIsModalVisible(false);
+      } else {
+        throw new Error(response.data?.message || '创建失败');
       }
     } catch (error) {
+      console.error('创建项目失败:', error);
       messageApi.error(error.message || '创建项目失败');
     }
   };
@@ -375,7 +382,7 @@ const Home = () => {
             <Card 
               key={project.id} 
               className="project-card"
-              onClick={() => navigate(`/projects/${project.id}`)}
+              onClick={() => navigate(`/projects/${project.id}/editor`)}
               hoverable
               extra={
                 <div className="card-actions" onClick={e => e.stopPropagation()}>

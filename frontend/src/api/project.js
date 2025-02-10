@@ -11,9 +11,13 @@ export const projectApi = {
 
   // 创建新项目
   createProject: (data) => {
+    const token = localStorage.getItem('token');
     return request({
       url: '/api/projects',
       method: 'post',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       data: {
         ...data,
         createTime: new Date().toISOString()
@@ -44,6 +48,31 @@ export const projectApi = {
       url: '/api/projects/batch',
       method: 'delete',
       data: { projectIds }
+    });
+  },
+
+  // 获取项目文件列表
+  getProjectFiles: (projectId) => {
+    return request({
+      url: `/api/projects/${projectId}/files`,
+      method: 'get'
+    });
+  },
+
+  // 获取文件内容
+  getFileContent: (projectId, fileId) => {
+    return request({
+      url: `/api/projects/${projectId}/files/${fileId}/content`,
+      method: 'get'
+    });
+  },
+
+  // 保存文件内容
+  saveFileContent: (projectId, fileId, content) => {
+    return request({
+      url: `/api/projects/${projectId}/files/${fileId}/content`,
+      method: 'put',
+      data: content
     });
   }
 }; 

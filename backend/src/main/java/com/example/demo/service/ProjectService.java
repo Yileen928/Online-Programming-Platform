@@ -68,8 +68,7 @@ public class ProjectService {
     }
     
     public List<Project> getAllProjects() {
-        // 默认按创建时间降序排列
-        return projectRepository.findAllByOrderByCreatedAtDesc();
+        return projectRepository.findByIsPublicTrueOrderByCreatedAtDesc();
     }
 
     public Project updateProject(Project project) {
@@ -82,5 +81,9 @@ public class ProjectService {
 
     public void batchDeleteProjects(List<Long> projectIds) {
         projectRepository.deleteAllById(projectIds);
+    }
+
+    public List<Project> getProjectsByUserId(Long userId) {
+        return projectRepository.findByCreatorIdOrderByCreatedAtDesc(userId);
     }
 } 

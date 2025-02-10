@@ -15,6 +15,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpMethod;
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -36,13 +37,20 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/projects/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/projects/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/projects/**").authenticated()
+                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/projects/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/projects/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/projects/**").authenticated()
                 .anyRequest().authenticated())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(handling -> handling
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"success\":false,\"message\":\"请先登录\"}");
+                })
+            );
 
         return http.build();
     }
