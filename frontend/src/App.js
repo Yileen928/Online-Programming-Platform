@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate, createRoutesFromElements, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ConfigProvider, theme, Layout, message } from 'antd';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -13,6 +13,7 @@ import './styles/github.css';
 import { MessageContext } from './contexts/MessageContext';
 import { userApi } from './api/user';
 import ProjectEditor from './pages/ProjectEditor';
+import Settings from './pages/Settings';
 
 const { Content } = Layout;
 
@@ -109,74 +110,85 @@ const PrivateRoute = ({ children }) => {
 function App() {
   const [messageApi, contextHolder] = message.useMessage();
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        {/* 根路由重定向到登录页面 */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        
+        {/* 公开路由 */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        
+        {/* 受保护的路由 */}
+        <Route path="/home" element={
+          <PrivateRoute>
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projects" element={
+          <PrivateRoute>
+            <MainLayout>
+              <ProjectManagement />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/datasets" element={
+          <PrivateRoute>
+            <MainLayout>
+              <DatasetManagement />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/teams" element={
+          <PrivateRoute>
+            <MainLayout>
+              <TeamManagement />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/discussions" element={
+          <PrivateRoute>
+            <MainLayout>
+              <div>讨论页面</div>
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/settings" element={
+          <PrivateRoute>
+            <MainLayout>
+              <Settings />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projects/:projectId/editor" element={
+          <PrivateRoute>
+            <MainLayout>
+              <ProjectEditor />
+            </MainLayout>
+          </PrivateRoute>
+        } />
+
+        {/* 404 路由 - 必须放在最后 */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </>
+    ),
+    {
+      basename: '/', // 添加基础路径
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }
+    }
+  );
+
   return (
     <ConfigProvider theme={darkTheme}>
       <MessageContext.Provider value={messageApi}>
         {contextHolder}
-        <Router>
-          <Routes>
-            {/* 根路由重定向到登录页面 */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            
-            {/* 公开路由 */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            
-            {/* 受保护的路由 */}
-            <Route path="/home" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <Home />
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/projects" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <ProjectManagement />
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/datasets" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <DatasetManagement />
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/teams" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <TeamManagement />
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/discussions" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <div>讨论页面</div>
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/settings" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <div>设置页面</div>
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            <Route path="/projects/:projectId/editor" element={
-              <PrivateRoute>
-                <MainLayout>
-                  <ProjectEditor />
-                </MainLayout>
-              </PrivateRoute>
-            } />
-            
-            {/* 404 路由重定向到登录页面 */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </Router>
+        <RouterProvider router={router} />
       </MessageContext.Provider>
     </ConfigProvider>
   );

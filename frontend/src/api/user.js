@@ -17,12 +17,10 @@ export const userApi = {
 
   // 获取用户信息
   getUserInfo: () => {
-    return request
-        .get('/api/user/info')
-        .then((response) => response.data) // 返回数据
-        .catch((error) => {
-          throw error.response?.data || { message: '获取用户信息失败' };
-        });
+    return request({
+      url: '/api/users/info',
+      method: 'get'
+    });
   },
 
   // 更新用户信息
@@ -38,7 +36,7 @@ export const userApi = {
   // 获取用户最近的项目
   getRecentProjects: () => {
     return request({
-      url: '/api/user/projects',
+      url: '/api/users/projects',
       method: 'get'
     });
   },
@@ -109,6 +107,24 @@ export const userApi = {
   createProject: (data) => {
     return request({
       url: '/api/projects',
+      method: 'post',
+      data
+    });
+  },
+
+  // 更新个人信息
+  updateProfile: (data) => {
+    return request({
+      url: '/api/users/profile',
+      method: 'post',
+      data
+    });
+  },
+
+  // 修改密码
+  changePassword: (data) => {
+    return request({
+      url: '/api/users/password',
       method: 'post',
       data
     });

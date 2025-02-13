@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.RegisterRequest;
+import com.example.demo.model.ChangePasswordRequest;
+import com.example.demo.model.UserProfileRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 // import java.util.List;
@@ -193,5 +196,64 @@ public class UserService {
             throw new RuntimeException("用户名或密码错误");
         }
         return jwtUtil.generateToken(user.getId(), user.getUsername());
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("用户不存在"));
+    }
+
+    private void validatePassword(String password) {
+        // 密码长度检查
+        if (password.length() < 8 || password.length() > 16) {
+            throw new RuntimeException("密码长度必须在8-16位之间");
+        }
+        
+        // 使用正则表达式检查密码复杂度
+        String pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$";
+        if (!password.matches(pattern)) {
+            throw new RuntimeException("密码必须包含字母、数字和特殊字符");
+        }
+    }
+
+    @Transactional
+    public boolean changePassword(Long userId, ChangePasswordRequest request) {
+        User user = getUserById(userId);
+        
+        // 验证旧密码
+        if (!user.getPassword().equals(request.getOldPassword())) {
+            throw new RuntimeException("当前密码错误");
+        }
+        
+        // 验证新密码
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("两次输入的新密码不一致");
+        }
+        
+        // 验证密码复杂度
+        validatePassword(request.getNewPassword());
+        
+        // 更新密码
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+        
+        // 记录日志
+        log.info("用户 {} 修改了密码", user.getUsername());
+        
+        return true;
+    }
+
+    @Transactional
+    public User updateProfile(Long userId, UserProfileRequest request) {
+        User user = getUserById(userId);
+        
+        // 如果新邮箱与当前邮箱不同，检查是否已被使用
+        if (!user.getEmail().equals(request.getEmail()) && 
+            userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("该邮箱已被使用");
+        }
+        
+        user.setEmail(request.getEmail());
+        return userRepository.save(user);
     }
 }

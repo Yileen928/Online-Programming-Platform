@@ -30,8 +30,8 @@ request.interceptors.response.use(
     return response;
   },
   error => {
+    console.error('请求错误:', error);
     if (error.response?.status === 401) {
-      // token 过期或无效，重定向到登录页
       localStorage.removeItem('token');
       window.location.href = '/login';
     }

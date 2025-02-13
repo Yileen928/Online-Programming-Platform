@@ -16,10 +16,16 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
 import com.example.demo.service.ProjectService;
 import com.example.demo.entity.Project;
+import org.springframework.security.core.Authentication;
+import lombok.extern.slf4j.Slf4j;
+import com.example.demo.security.CustomUserDetails;
+import com.example.demo.model.UserProfileRequest;
+import com.example.demo.model.ChangePasswordRequest;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
+@Slf4j
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -67,12 +73,11 @@ public class UserController {
     @GetMapping("/projects")
     public ResponseEntity<?> getUserProjects(@RequestHeader("Authorization") String token) {
         try {
-            List<Project> projects = projectService.getRecentProjectsByToken(token);
-            return ResponseEntity.ok(projects);
+            String cleanToken = token.replace("Bearer ", "");
+            List<Project> projects = projectService.getRecentProjectsByToken(cleanToken);
+            return ResponseEntity.ok(new ApiResponse(true, projects, "获取成功"));
         } catch (Exception e) {
-            log.error("Error getting user projects", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("获取项目失败: " + e.getMessage()));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
         }
     }
 
@@ -183,6 +188,45 @@ public class UserController {
             log.error("Registration error", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("注册失败: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo(Authentication authentication) {
+        try {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userService.getUserById(userDetails.getUserId());
+            return ResponseEntity.ok(new ApiResponse(true, user, "获取用户信息成功"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+        }
+    }
+    
+    @PostMapping("/profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestBody UserProfileRequest request,
+            Authentication authentication) {
+        try {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User updatedUser = userService.updateProfile(userDetails.getUserId(), request);
+            return ResponseEntity.ok(new ApiResponse(true, updatedUser, "个人信息更新成功"));
+        } catch (Exception e) {
+            log.error("更新个人信息失败", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+        }
+    }
+    
+    @PostMapping("/password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordRequest request,
+            Authentication authentication) {
+        try {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            boolean needRelogin = userService.changePassword(userDetails.getUserId(), request);
+            return ResponseEntity.ok(new ApiResponse(true, needRelogin, "密码修改成功，请重新登录"));
+        } catch (Exception e) {
+            log.error("修改密码失败", e);
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
         }
     }
 }

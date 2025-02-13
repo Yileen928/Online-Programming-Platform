@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input, Select, Radio, Button, Tabs, Card, Row, Col, Tag, message, Modal, Popconfirm } from 'antd';
+import { Input, Select, Radio, Button, Tabs, Card, Row, Col, Tag, message, Modal, Popconfirm, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import { userApi } from '../api/user';
@@ -368,8 +368,14 @@ const Home = () => {
         <div className="header-icons">
           <span>📅</span>
           <span>❓</span>
-          <span>🔔</span>
-          <span className="avatar">👤</span>
+          <span>��</span>
+          <Avatar.Group
+            max={{ count: 3 }}
+          >
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male&n=1" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=female&n=1" />
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male&n=2" />
+          </Avatar.Group>
         </div>
       </div>
 
