@@ -21,6 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.model.UserProfileRequest;
 import com.example.demo.model.ChangePasswordRequest;
+import com.example.demo.model.AvatarUpdateRequest;
+import java.util.HashMap;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
+import com.example.demo.entity.UserAvatar;
+import com.example.demo.repository.UserAvatarRepository;
 
 @SuppressWarnings("unused")
 @RestController
@@ -41,6 +47,9 @@ public class UserController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private UserAvatarRepository userAvatarRepository;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
@@ -195,24 +204,55 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         try {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            User user = userService.getUserById(userDetails.getUserId());
-            return ResponseEntity.ok(new ApiResponse(true, user, "获取用户信息成功"));
+            User user = userService.getUserById(userDetails.getUserId().toString());
+            
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", user.getId());
+            userInfo.put("username", user.getUsername());
+            userInfo.put("email", user.getEmail());
+            
+            // 从MongoDB获取头像
+            try {
+                UserAvatar avatar = userAvatarRepository.findByUserId(user.getId())
+                    .orElse(null);
+                if (avatar != null) {
+                    String avatarUrl = String.format("http://localhost:8080/api/users/avatars/%s?t=%d", 
+                        avatar.getId(), System.currentTimeMillis());
+                    userInfo.put("avatarUrl", avatarUrl);
+                }
+            } catch (Exception e) {
+                log.warn("获取用户头像失败: userId={}", user.getId(), e);
+            }
+            
+            return ResponseEntity.ok(new ApiResponse(true, userInfo, "获取用户信息成功"));
         } catch (Exception e) {
+            log.error("获取用户信息失败", e);
             return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
         }
     }
     
     @PostMapping("/profile")
-    public ResponseEntity<?> updateProfile(
-            @RequestBody UserProfileRequest request,
-            Authentication authentication) {
+    public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request) {
         try {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            User updatedUser = userService.updateProfile(userDetails.getUserId(), request);
-            return ResponseEntity.ok(new ApiResponse(true, updatedUser, "个人信息更新成功"));
+            if (request.getUserId() == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "用户ID不能为空"
+                ));
+            }
+            
+            log.info("更新用户信息: {}", request);
+            userService.updateProfile(request.getUserId(), request);
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "个人信息更新成功"
+            ));
         } catch (Exception e) {
-            log.error("更新个人信息失败", e);
-            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+            log.error("更新用户信息失败", e);
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "message", "更新失败: " + e.getMessage()
+            ));
         }
     }
     
@@ -227,6 +267,67 @@ public class UserController {
         } catch (Exception e) {
             log.error("修改密码失败", e);
             return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+        }
+    }
+
+    @GetMapping("/avatars/{id}")
+    public ResponseEntity<?> getAvatar(@PathVariable String id) {
+        try {
+            UserAvatar avatar = userAvatarRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("头像不存在"));
+            
+            if (avatar.getData() == null || avatar.getData().length == 0) {
+                log.error("头像数据为空: id={}", id);
+                return ResponseEntity.notFound().build();
+            }
+
+            MediaType mediaType = MediaType.parseMediaType(
+                avatar.getContentType() != null ? avatar.getContentType() : "image/jpeg"
+            );
+            
+            return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header("Cache-Control", "max-age=31536000")
+                .header("Content-Disposition", "inline; filename=" + avatar.getFilename())
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .header("Access-Control-Allow-Headers", "*")
+                .contentLength(avatar.getFileSize())
+                .body(avatar.getData());
+        } catch (Exception e) {
+            log.error("获取头像失败: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping(value = "/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAvatar(
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication) {
+        try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse(false, null, "文件不能为空"));
+            }
+            
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User updatedUser = userService.updateAvatar(userDetails.getUserId(), file);
+            
+            // 从MongoDB获取新保存的头像
+            UserAvatar avatar = userAvatarRepository.findByUserId(updatedUser.getId())
+                .orElseThrow(() -> new RuntimeException("头像保存失败"));
+            
+            // 构建正确的头像URL
+            String avatarUrl = "/api/users/avatars/" + avatar.getId();
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("avatarId", avatar.getId());
+            response.put("avatarUrl", avatarUrl);
+            
+            return ResponseEntity.ok(new ApiResponse(true, response, "头像更新成功"));
+        } catch (Exception e) {
+            log.error("头像上传失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(false, null, "头像上传失败: " + e.getMessage()));
         }
     }
 }

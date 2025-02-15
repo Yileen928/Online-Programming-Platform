@@ -135,7 +135,7 @@ console.log(quickSort(array));`;
 
               <div className="login-links">
                 <Link to="/forgot-password">忘记密码？</Link>
-                <Link to="/register">注册账号</Link>
+                {/* <Link to="/register">注册账号</Link> */}
               </div>
             </Form>
           </div>

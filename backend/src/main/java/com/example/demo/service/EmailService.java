@@ -1,13 +1,14 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class EmailService {
     
-    public void sendPasswordResetEmail(String email, String token) {
-        // 实现发送重置密码邮件的逻辑
-        // 可以使用 JavaMailSender 或其他邮件服务
-        System.out.println("发送重置密码邮件到: " + email + ", 令牌/验证码: " + token);
+    public void sendResetPasswordEmail(String email, String token) {
+        log.info("模拟发送密码重置邮件到 {}, token: {}", email, token);
+        // 暂时只打印日志，不实际发送邮件
     }
 } 

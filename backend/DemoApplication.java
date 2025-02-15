@@ -1,4 +1,4 @@
-//src/main/java/com/example/demo/
+/*//src/main/java/com/example/demo/
 //├── DemoApplication.java                # 主类，位于顶层包
 //├── config/
 //│   └── SecurityConfig.java             # 配置类，定义了 PasswordEncoder Bean
@@ -14,3 +14,4 @@
 //│   └── UserService.java                # 服务层，包含用户注册和验证逻辑
 //└── util/
 //    └── JwtUtil.java                    # JWT 工具类，用于生成和验证 Token
+*/

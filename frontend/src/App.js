@@ -7,13 +7,14 @@ import ProjectManagement from './components/ProjectManagement';
 import DatasetManagement from './components/DatasetManagement';
 import TeamManagement from './components/TeamManagement';
 import SideBar from './components/SideBar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './styles/prism-theme.css';
 import './styles/github.css';
 import { MessageContext } from './contexts/MessageContext';
 import { userApi } from './api/user';
 import ProjectEditor from './pages/ProjectEditor';
 import Settings from './pages/Settings';
+import ResetPassword from './components/ResetPassword';
 
 const { Content } = Layout;
 
@@ -64,30 +65,29 @@ const MainLayout = ({ children }) => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const [messageApi] = message.useMessage();
+  const messageApi = useContext(MessageContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const verifyAuth = async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          throw new Error('未登录');
+          throw new Error('请先登录');
         }
-        
+
         const response = await userApi.checkAuth();
         if (response?.valid) {
           setIsAuthenticated(true);
         } else {
-          throw new Error('认证失败');
+          throw new Error('认证已过期');
         }
       } catch (error) {
-        console.error('认证失败:', error);
         localStorage.removeItem('token');
-        messageApi.error('请先登录');
+        messageApi.error(error.message);
         navigate('/login', { 
           state: { from: location },
           replace: true 
@@ -97,7 +97,7 @@ const PrivateRoute = ({ children }) => {
       }
     };
 
-    checkAuth();
+    verifyAuth();
   }, [navigate, location, messageApi]);
 
   if (isLoading) {
@@ -170,6 +170,7 @@ function App() {
             </MainLayout>
           </PrivateRoute>
         } />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* 404 路由 - 必须放在最后 */}
         <Route path="*" element={<Navigate to="/login" replace />} />
@@ -186,8 +187,8 @@ function App() {
 
   return (
     <ConfigProvider theme={darkTheme}>
+      {contextHolder}
       <MessageContext.Provider value={messageApi}>
-        {contextHolder}
         <RouterProvider router={router} />
       </MessageContext.Provider>
     </ConfigProvider>

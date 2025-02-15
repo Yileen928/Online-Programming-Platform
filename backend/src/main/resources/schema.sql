@@ -4,7 +4,9 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255),
-    role VARCHAR(255)
+    role VARCHAR(255),
+    avatar VARCHAR(255),  -- 存储头像URL或路径
+    avatar_updated_at TIMESTAMP  -- 记录头像更新时间
 );
 
 -- 创建项目表（如果不存在）
@@ -75,4 +77,10 @@ CREATE TABLE IF NOT EXISTS project_files (
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
-); 
+);
+
+-- 确保users表有avatar和avatar_updated_at字段
+ALTER TABLE users 
+ADD COLUMN IF NOT EXISTS avatar VARCHAR(255),
+ADD COLUMN IF NOT EXISTS avatar_updated_at TIMESTAMP,
+ADD COLUMN IF NOT EXISTS avatar_file_id VARCHAR(255); 

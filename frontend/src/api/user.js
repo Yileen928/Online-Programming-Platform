@@ -1,4 +1,5 @@
 import request from '../utils/request';
+import axios from 'axios';
 
 export const userApi = {
   // 登录方法
@@ -9,18 +10,35 @@ export const userApi = {
         method: 'post',
         data
       });
-      return response.data;  // 直接返回响应数据
+      if (response.data.success) {
+        // 保存token和userId
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+      }
+      return response.data;
     } catch (error) {
       throw error.response?.data || error;
     }
   },
 
   // 获取用户信息
-  getUserInfo: () => {
-    return request({
-      url: '/api/users/info',
-      method: 'get'
-    });
+  async getUserInfo(retry = true) {
+    try {
+      const response = await request.get('/api/users/info');
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401 && retry) {
+        // token 过期，尝试刷新
+        try {
+          await this.refreshToken();
+          // 重试一次
+          return await this.getUserInfo(false);
+        } catch (refreshError) {
+          throw error;
+        }
+      }
+      throw error;
+    }
   },
 
   // 更新用户信息
@@ -72,13 +90,18 @@ export const userApi = {
   },
 
   // 注销用户
-  logout: () => {
-    return request
-        .post('/api/user/logout')
-        .then((response) => response.data)
-        .catch((error) => {
-          throw error.response?.data || { message: '注销失败' };
-        });
+  logout: async () => {
+    try {
+      const response = await request({
+        url: '/api/auth/logout',
+        method: 'post'
+      });
+      return response.data;
+    } catch (error) {
+      // 即使请求失败也要清除本地token
+      localStorage.removeItem('token');
+      throw error;
+    }
   },
 
   // 检查认证状态
@@ -113,12 +136,20 @@ export const userApi = {
   },
 
   // 更新个人信息
-  updateProfile: (data) => {
-    return request({
-      url: '/api/users/profile',
-      method: 'post',
-      data
-    });
+  updateProfile: async (data) => {
+    try {
+      const response = await request({
+        url: '/api/users/profile',
+        method: 'post',
+        data: {
+          ...data,
+          userId: localStorage.getItem('userId') // 添加用户ID
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
   },
 
   // 修改密码
@@ -128,5 +159,45 @@ export const userApi = {
       method: 'post',
       data
     });
+  },
+
+  // 更新头像
+  updateAvatar: async (formData) => {
+    try {
+      const response = await request({
+        url: '/api/users/avatar',
+        method: 'post',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
+  },
+
+  // 上传图片到图床
+  uploadImage: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await axios.post('/api/upload/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('上传失败:', error);
+      throw error;
+    }
+  },
+
+  // 刷新token
+  refreshToken: async () => {
+    // 实现刷新token的逻辑
   }
 };
