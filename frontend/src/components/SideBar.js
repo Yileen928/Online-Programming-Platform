@@ -21,6 +21,8 @@ const SideBar = () => {
       label: '首页',
       order: 1
     },
+    
+  
     {
       key: '/projects',
       icon: <ProjectOutlined />,
@@ -70,6 +72,8 @@ const SideBar = () => {
         items={menuItems}
         onClick={handleMenuClick}
         className="sidebar-menu"
+        theme="light"  // 添加这行
+      style={{ background: 'transparent' }}
       />
     </aside>
   );
