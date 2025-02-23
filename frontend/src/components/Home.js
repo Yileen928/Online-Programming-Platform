@@ -62,7 +62,6 @@ const Home = () => {
   const fetchProjects = async () => {
     try {
       const response = await projectApi.getProjects();
-      // 从response.data中获取项目列表
       const projectList = response.data?.data || [];
       const uniqueProjects = Array.from(
         new Map(projectList.map(project => [project.id, project])).values()
@@ -89,9 +88,7 @@ const Home = () => {
 
       if (response.data?.success) {
         messageApi.success('项目创建成功');
-        // 创建成功后直接导航到编辑器页面
         navigate(`/projects/${response.data.data.id}/editor`);
-        // 重置表单
         setProjectName('');
         setSelectedTemplate(null);
         setIsModalVisible(false);
@@ -118,7 +115,6 @@ const Home = () => {
     }
   };
 
-  // 获取语言图标
   const getLanguageIcon = (language) => {
     switch (language?.toLowerCase()) {
       case 'java':
@@ -132,7 +128,6 @@ const Home = () => {
     }
   };
 
-  // 获取语言标签颜色
   const getLanguageColor = (language) => {
     switch (language?.toLowerCase()) {
       case 'java':
@@ -175,7 +170,7 @@ const Home = () => {
         setIsModalVisible(false);
         setProjectName('');
         setProjectLanguage('');
-        fetchProjects(); // 刷新项目列表
+        fetchProjects();
       }
     } catch (error) {
       console.error('创建项目失败:', error);
@@ -183,9 +178,8 @@ const Home = () => {
     }
   };
 
-  // 删除项目
   const handleDelete = async (project, e) => {
-    e.stopPropagation(); // 阻止事件冒泡
+    e.stopPropagation();
     try {
       await projectApi.deleteProject(project.id);
       messageApi.success('删除成功');
@@ -196,9 +190,8 @@ const Home = () => {
     }
   };
 
-  // 打开编辑模态框
   const showEditModal = (project, e) => {
-    e.stopPropagation(); // 阻止事件冒泡
+    e.stopPropagation();
     setEditingProject(project);
     setProjectName(project.name);
     setProjectLanguage(project.language);
@@ -206,7 +199,6 @@ const Home = () => {
     setIsModalVisible(true);
   };
 
-  // 处理编辑或创建
   const handleOk = async () => {
     if (!projectName.trim() || !projectLanguage) {
       messageApi.error('请输入项目名称并选择编程语言');
@@ -215,7 +207,6 @@ const Home = () => {
 
     try {
       if (editingProject) {
-        // 编辑现有项目
         await projectApi.updateProject(editingProject.id, {
           name: projectName.trim(),
           language: projectLanguage,
@@ -223,7 +214,6 @@ const Home = () => {
         });
         messageApi.success('更新成功');
       } else {
-        // 创建新项目
         await projectApi.createProject({
           name: projectName.trim(),
           language: projectLanguage,
@@ -241,7 +231,6 @@ const Home = () => {
     }
   };
 
-  // 重置表单
   const resetForm = () => {
     setProjectName('');
     setProjectLanguage('');
@@ -249,10 +238,8 @@ const Home = () => {
     setEditingProject(null);
   };
 
-  // 获取并处理项目列表
   useEffect(() => {
     const processProjects = (projects) => {
-      // 根据创建时间排序
       const sorted = [...projects].sort((a, b) => {
         if (sortOrder === 'recent') {
           return new Date(b.createTime) - new Date(a.createTime);
@@ -260,7 +247,6 @@ const Home = () => {
         return new Date(a.createTime) - new Date(b.createTime);
       });
 
-      // 根据选择的语言过滤
       if (selectedLanguage === 'all') {
         setFilteredProjects(sorted);
       } else {
@@ -367,7 +353,7 @@ const Home = () => {
         <div className="header-icons">
           <span>📅</span>
           <span>❓</span>
-          <span>��</span>
+          <span></span>
           <Avatar.Group
             max={{ count: 3 }}
           >
