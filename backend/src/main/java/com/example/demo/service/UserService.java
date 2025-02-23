@@ -2,26 +2,47 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.RegisterRequest;
+import com.example.demo.model.ChangePasswordRequest;
+import com.example.demo.model.UserProfileRequest;
 import com.example.demo.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.demo.repository.FileRepository;
+import com.example.demo.repository.UserAvatarRepository;
+import com.example.demo.entity.UserAvatar;
+import com.example.demo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 // import java.util.List;
 import java.util.UUID;
+import java.io.IOException;
 
 @Service
+@Transactional
+@Slf4j
 public class UserService {
-
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private FileRepository fileRepository;
+
+    @Autowired
+    private UserAvatarRepository userAvatarRepository;
 
     /**
      * 验证用户的用户名和密码。
@@ -141,7 +162,7 @@ public class UserService {
         userRepository.save(user);
 
         // 发送重置邮件
-        emailService.sendPasswordResetEmail(email, token);
+        emailService.sendResetPasswordEmail(email, token);
     }
 
     /**
@@ -173,5 +194,148 @@ public class UserService {
         user.setResetToken(null);
         user.setResetTokenExpiry(null);
         userRepository.save(user);
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public String login(String username, String password) {
+        User user = verifyUser(username, password);
+        if (user == null) {
+            throw new RuntimeException("用户名或密码错误");
+        }
+        return jwtUtil.generateToken(user.getId(), user.getUsername());
+    }
+
+    public User getUserById(String id) {
+        User user = userRepository.findById(Long.parseLong(id))
+            .orElseThrow(() -> new RuntimeException("用户不存在"));
+            
+        // 如果有头像ID，检查文件是否存在
+        if (user.getAvatarId() != null) {
+            boolean fileExists = fileRepository.existsById(user.getAvatarId());
+            if (!fileExists) {
+                // 如果文件不存在，清除头像ID
+                user.setAvatarId(null);
+                userRepository.save(user);
+            }
+        }
+        
+        return user;
+    }
+
+    private void validatePassword(String password) {
+        // 密码长度检查
+        if (password.length() < 8 || password.length() > 16) {
+            throw new RuntimeException("密码长度必须在8-16位之间");
+        }
+        
+        // 使用正则表达式检查密码复杂度
+        String pattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$";
+        if (!password.matches(pattern)) {
+            throw new RuntimeException("密码必须包含字母、数字和特殊字符");
+        }
+    }
+
+    @Transactional
+    public boolean changePassword(Long userId, ChangePasswordRequest request) {
+        User user = getUserById(userId.toString());
+        
+        // 验证旧密码
+        if (!user.getPassword().equals(request.getOldPassword())) {
+            throw new RuntimeException("当前密码错误");
+        }
+        
+        // 验证新密码
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new RuntimeException("两次输入的新密码不一致");
+        }
+        
+        // 验证密码复杂度
+        validatePassword(request.getNewPassword());
+        
+        // 更新密码
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+        
+        // 记录日志
+        log.info("用户 {} 修改了密码", user.getUsername());
+        
+        return true;
+    }
+
+    @Transactional
+    public void updateProfile(Long userId, UserProfileRequest request) {
+        User user = getUserById(userId.toString());
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 检查新邮箱是否为空
+        if (request.getEmail() == null) {
+            throw new RuntimeException("邮箱不能为空");
+        }
+
+        // 如果新邮箱与当前邮箱不同，检查是否已被使用
+        String currentEmail = user.getEmail();
+        if (currentEmail == null || !currentEmail.equals(request.getEmail())) {
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new RuntimeException("该邮箱已被使用");
+            }
+        }
+
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User updateAvatar(Long userId, MultipartFile file) throws IOException {
+        log.info("开始更新用户头像: userId={}", userId);
+        
+        // 验证文件
+        validateFile(file);
+        
+        // 获取用户
+        User user = getUserById(userId.toString());
+        
+        try {
+            // 删除旧头像
+            userAvatarRepository.deleteByUserId(userId);
+            
+            // 创建新头像
+            UserAvatar avatar = new UserAvatar();
+            avatar.setUserId(userId);
+            avatar.setFilename(file.getOriginalFilename());
+            avatar.setContentType(file.getContentType());
+            avatar.setData(file.getBytes());
+            avatar.setFileSize(file.getSize());
+            avatar.setUploadTime(LocalDateTime.now());
+            
+            // 保存到MongoDB
+            UserAvatar savedAvatar = userAvatarRepository.save(avatar);
+            log.info("头像已保存: avatarId={}, userId={}, size={}", 
+                savedAvatar.getId(), userId, savedAvatar.getFileSize());
+            
+            return user;
+        } catch (Exception e) {
+            log.error("头像更新失败: userId={}, error={}", userId, e.getMessage());
+            throw new RuntimeException("头像更新失败: " + e.getMessage());
+        }
+    }
+
+    private void validateFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new RuntimeException("文件不能为空");
+        }
+        
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new RuntimeException("只支持图片文件");
+        }
+        
+        if (file.getSize() > 2 * 1024 * 1024) {
+            throw new RuntimeException("图片大小不能超过2MB");
+        }
     }
 }

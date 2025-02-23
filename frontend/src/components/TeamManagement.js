@@ -5,6 +5,11 @@ import './TeamManagement.css';
 
 const { Header, Content } = Layout;
 
+const getRandomAvatar = (gender) => {
+  // 使用 DiceBear 作为替代
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}`;
+};
+
 const TeamManagement = () => {
   const [teams] = useState([
     {
