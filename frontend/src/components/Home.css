@@ -13,7 +13,7 @@ body {
 .home-content.dark {
   padding: 24px;
   min-height: 100vh;
-  background: #1a1a1a;
+  background: #2d2d2d; /* 灰色背景 */
 }
 
 /* 搜索区域 */
@@ -46,7 +46,7 @@ body {
 
 /* 主要内容区域 */
 .template-content {
-  background: #1e1e1e;
+  background: #1a1a1a; /* 黑色背景 */
   padding: 24px;
   border-radius: 8px;
 }
@@ -54,24 +54,25 @@ body {
 /* 表单布局 */
 .template-form {
   display: flex;
-  gap: 24px;
+  gap: 0;
   margin-bottom: 24px;
 }
 
-/* 左侧区域 */
-.form-left {
+.template-container, .project-name-container {
   width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-/* 右侧区域 */
-.form-right {
-  width: 50%;
+.template-container {
+  background-color: #2d2d2d; /* 灰色背景 */
+}
+
+.project-name-container {
+  background-color: #1a1a1a; /* 黑色背景 */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
 }
 
 /* 输入框和选择框 */
@@ -112,7 +113,8 @@ body {
 .privacy-options .ant-radio-wrapper span:last-child {
   flex: 1;
 }
-* 添加描述文本样式 */
+
+/* 添加描述文本样式 */
 .privacy-description {
   color: #0a0a0adb;
   font-size: 12px;
@@ -129,16 +131,7 @@ body {
 }
 
 .create-button {
-  width: 200px;  /* 设置固定宽度而不是50% */
-  height: 40px;
-  background: #8b3e3e !important;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-}
-
-.create-button {
-  width: 50%;
+  width: 200px;
   height: 40px;
   background: #8b3e3e !important;
   border: none;
@@ -268,9 +261,16 @@ body {
 
 /* 标签页样式 */
 .ant-tabs-nav {
-  margin-bottom: 24px !important;
+  background-color: #1a1a1a; /* 黑色背景 */
+  padding: 8px;
+  border-radius: 4px 4px 0 0; /* 只在顶部添加圆角 */
+  margin-bottom: -1px; /* 去掉底部的外边距 */
 }
-
+.template-content {
+  background: #1a1a1a; /* 黑色背景 */
+  padding: 0 24px 24px 24px; /* 去掉顶部的内边距 */
+  border-radius: 0 0 8px 8px; /* 只在底部添加圆角 */
+}
 .ant-tabs-nav::before {
   border-bottom: 1px solid #2f2f2f !important;
 }

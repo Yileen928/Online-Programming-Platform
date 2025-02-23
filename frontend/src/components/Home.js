@@ -25,7 +25,7 @@ import {
 const { Search } = Input;
 const { Option } = Select;
 
-const Home = () => {
+const Home = () => {    
   const navigate = useNavigate();
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [projectName, setProjectName] = useState('');
@@ -35,7 +35,7 @@ const Home = () => {
   const [githubConnected, setGithubConnected] = useState(false);
   const [giteeConnected, setGiteeConnected] = useState(false);
   const githubRepoListRef = useRef();
-  const giteeRepoListRef = useRef();
+  const giteeRepoListRef = useRef();   
   const messageApi = useMessage();
   const [projects, setProjects] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('all');
@@ -281,24 +281,24 @@ const Home = () => {
       children: (
         <div className="template-content">
           <div className="template-form">
-            <div className="form-left">
+            <div className="template-container">
               <Select
                 placeholder="选择模版"
-                style={{ width: '50%' }}
+                style={{ width: '100%' }}
                 onChange={value => setSelectedTemplate(value)}
               >
                 <Option value="python">Python</Option>
                 <Option value="c">C</Option>
                 <Option value="java">Java</Option>
               </Select>
+            </div>
+            <div className="project-name-container">
               <Input
                 placeholder="项目标题"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 className="project-title-input dark"
               />
-            </div>
-            <div className="form-right">
               <div className="privacy-options">
                 <Radio.Group
                   value={isPublic}
@@ -308,14 +308,14 @@ const Home = () => {
                   <Radio value={false}>隐私</Radio>
                 </Radio.Group>
               </div>
+              <Button 
+                type="primary" 
+                className="create-button"
+              >
+                + CODE
+              </Button>
             </div>
           </div>
-          <Button 
-            type="primary" 
-            className="create-button"
-          >
-            CODE
-          </Button>
         </div>
       ),
     },

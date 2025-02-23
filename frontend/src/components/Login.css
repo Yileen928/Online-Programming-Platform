@@ -14,6 +14,11 @@
   padding: 40px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
 }
+.new-container {
+  background-color: #1a1a1a; /* 黑色背景 */
+  padding: 10px; /* 可根据需要调整 */
+  border-radius: 4px; /* 可根据需要调整 */
+}
 
 .login-form-container {
   width: 100%;
