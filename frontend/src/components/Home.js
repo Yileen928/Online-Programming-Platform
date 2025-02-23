@@ -312,10 +312,15 @@ const Home = () => {
           <Button 
             type="primary" 
             className="create-button"
+<<<<<<< Updated upstream
             onClick={handleCreateProject}
             disabled={!selectedTemplate || !projectName.trim()}
           >
             创建项目
+=======
+          >
+            CODE
+>>>>>>> Stashed changes
           </Button>
         </div>
       ),
