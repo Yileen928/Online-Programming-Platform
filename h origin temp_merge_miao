@@ -1,0 +1,58 @@
+[33md77abba[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtemp_merge_miao[m[33m, [m[1;31morigin/temp_merge_miao[m[33m)[m css与js更改
+[33m8b29b75[m 设置功能，添加mongodb存放头像,初步完成数据集功能
+[33m1b047d9[m 设置修改功能
+[33mc2b343c[m jwt实现控制，项目创建、删除功能
+[33m6e9fd36[m 修改增加功能
+[33me5b22e9[m feat: add JWT filter, trigger.sql and global css
+[33m0ed5c89[m[33m ([m[1;31morigin/miao[m[33m)[m create project
+[33mad6f626[m 创建仓库
+[33mba4f28f[m 添加gitee导入功能
+[33m90c2827[m feat: 添加项目创建功能
+[33mb365598[m feat: 完成GitHub仓库列表功能
+[33mbbb9c27[m 修复登录功能
+[33mbf6e330[m 更新登录验证逻辑
+[33m6fc0152[m 初始化提交
+[33ma4b45ad[m 更新登录验证逻辑
+[33m8562699[m 解决合并冲突
+[33mfc5cb06[m 解决合并冲突
+[33mf6ae7c8[m 本地修改
+[33mdc1077d[m Merge branch 'LC' of github.com:Yileen928/Online-Programming-Platform into LC
+[33m20a533c[m 更新代码：移除密码加密，修复登录功能
+[33m3dd847c[m chore: 更新 .gitignore 并解决冲突
+[33m4fe5917[m chore: 添加 .DS_Store 到 .gitignore
+[33mf1c8747[m chore: 忽略 .DS_Store 文件
+[33m0f3896e[m feat: 重构项目结构和样式
+[33m2ef73a0[m feat: 重构项目结构和样式
+[33ma019c94[m feat: 优化登录页面样式和布局
+[33m3c57538[m feat: 优化页面样式和布局
+[33m64b0433[m feat: 统一导航栏布局和代码样式
+[33m00559f7[m feat: 优化登录页面代码展示效果
+[33m8e3d70e[m feat: 优化字体加载方式
+[33m83667da[m feat: 添加像素字体并应用到代码展示区域
+[33m465e678[m Merge branch 'LC' into miao 必须提交
+[33m44166e6[m Merge branch 'miao' of https://github.com/Yileen928/Online-Programming-Platform into miao
+[33mad8d804[m merge: 合并 miao 分支
+[33md691852[m feat: 更新用户服务和配置
+[33m6406fd2[m feat: 完成导航功能更新
+[33mfcbffcd[m 删除注册
+[33m9c6d2fa[m Home.css
+[33m89abba9[m 修改注册
+[33m076c2b2[m 更新 VSCode 设置和 Home 组件样式
+[33md252691[m 你的提交信息
+[33m75e4352[m 解决与miao分支的合并冲突
+[33ma7774ec[m 你的提交信息
+[33mb945815[m feat: 修复导航功能，更新侧边栏样式
+[33m55df35f[m feat: 添加动态最近项目功能
+[33m502bc3a[m Merge branch 'LC' of https://github.com/Yileen928/Online-Programming-Platform into LC
+[33m2519e25[m feat: 更新首页布局，添加最近项目展示
+[33m11d9c9d[m Changes
+[33m75e3e79[m feat: Enhance Home component with project creation features and styling updates
+[33me98ae9c[m feat: 添加登录后用户名显示功能
+[33m94baf15[m feat: 完成基础登录功能和CORS配置
+[33m324d56f[m Changes
+[33ma3485d7[m[33m ([m[1;31morigin/ZHK[m[33m)[m Merge branch 'main' of https://github.com/Yileen928/Online-Programming-Platform
+[33m0724ba0[m Add complete project structure: Frontend: - React components and routing - API integration - Styling and assets - Package configuration
+[33m08b6b31[m Add dataset management page and update components
+[33mc227323[m Initial commit: Add complete project structure
+[33m538f38f[m Add frontend components: Home, Login, and SideBar
+[33mb91af63[m Initial commit
