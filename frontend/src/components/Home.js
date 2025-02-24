@@ -284,7 +284,7 @@ const Home = () => {
             <div className="form-left">
               <Select
                 placeholder="选择模版"
-                style={{ width: '50%' }}
+                style={{ width: '100%' }}
                 onChange={value => setSelectedTemplate(value)}
               >
                 <Option value="python">Python</Option>
@@ -304,30 +304,20 @@ const Home = () => {
                   value={isPublic}
                   onChange={(e) => setIsPublic(e.target.value)}
                 >
-                  <Radio value={true}>
-                    公开
-                    <div className="privacy-description">
-                      任何人都可以查看和分享这个项目。
-                    </div>
-                  </Radio>
-                  <Radio value={false}>
-                    隐私
-                    <div className="privacy-description">
-                      只有您可以查看和编辑这个项目。
-                    </div>
-                  </Radio>
+                  <Radio value={true}>公开</Radio>
+                  <Radio value={false}>隐私</Radio>
                 </Radio.Group>
               </div>
+              <Button 
+                type="primary" 
+                className="create-button"
+                onClick={handleCreateProject}
+                disabled={!selectedTemplate || !projectName.trim()}
+              >
+                创建项目
+              </Button>
             </div>
           </div>
-          <Button 
-            type="primary" 
-            className="create-button"
-            onClick={handleCreateProject}
-            disabled={!selectedTemplate || !projectName.trim()}
-          >
-            创建项目
-          </Button>
         </div>
       ),
     },

@@ -81,10 +81,11 @@ body {
 /* 输入框和选择框 */
 .ant-select,
 .project-title-input.dark {
-  width: 100%;
+  width: 100% !important;
   background: #2d2d2d;
   border: 1px solid #3d3d3d;
   color: #fff;
+  border-radius: 8px !important;
 }
 
 /* 隐私选项 */
@@ -395,4 +396,7 @@ h3 {
   border-radius: 10px;
   color: #fff;
   margin-top: auto; /* 将按钮推到容器底部 */
+}
+.form-left {
+  background-color: #323232b7; /* 灰色背景 */
 }
