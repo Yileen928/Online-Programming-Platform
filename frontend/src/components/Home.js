@@ -277,31 +277,51 @@ const Home = () => {
                 <Option value="c">C</Option>
                 <Option value="java">Java</Option>
               </Select>
-            </div>
-            <div className="project-name-container">
-              <Input
-                placeholder="项目标题"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                className="project-title-input dark"
-              />
-              <div className="privacy-options">
-                <Radio.Group
-                  value={isPublic}
-                  onChange={(e) => setIsPublic(e.target.value)}
-                >
-                  <Radio value={true}>公开</Radio>
-                  <Radio value={false}>隐私</Radio>
-                </Radio.Group>
               </div>
-              <Button 
-                type="primary" 
-                className="create-button"
-              >
-                + CODE
-              </Button>
-            </div>
+    <div className="form-right">
+      <Input
+        placeholder="项目标题"
+        value={projectName}
+        onChange={(e) => setProjectName(e.target.value)}
+        className="project-title-input dark"
+      />
+      <div className="privacy-options">
+  <Radio.Group
+    value={isPublic}
+    onChange={(e) => setIsPublic(e.target.value)}
+  >
+    <Radio value={true}>
+      公开
+      <div className="privacy-description">
+        任何人都可以查看和分享这个项目。
+      </div>
+    </Radio>
+    <Radio value={false}>
+      隐私
+      <div className="privacy-description">
+        只有您可以查看和编辑这个项目。
+      </div>
+    </Radio>
+  </Radio.Group>
+
+        </div>
+    </div>
+  </div>
+  
+  <div className="button-container">
+            <Button 
+              type="primary" 
+              className="create-button"
+            >
+
+            onClick={handleCreateProject}
+            disabled={!selectedTemplate || !projectName.trim()}
+          
+            创建项目
+            </Button>
           </div>
+          
+          </Button>
         </div>
       ),
     },
