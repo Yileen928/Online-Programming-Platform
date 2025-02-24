@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, List, Button, Upload, Input, Tag, Space, message, Modal } from 'antd';
 import { UploadOutlined, SearchOutlined, LikeOutlined, DownloadOutlined, CommentOutlined, EyeOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import request from '../utils/request';
 import './DatasetManagement.css';
 
 const { Search } = Input;
@@ -9,16 +9,41 @@ const { Search } = Input;
 const DatasetManagement = () => {
   const [datasets, setDatasets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  });
   const [selectedDataset, setSelectedDataset] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   // 获取数据集列表
-  const fetchDatasets = async () => {
+  const fetchDatasets = async (page = 0, size = 10) => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/datasets');
-      setDatasets(response.data);
+      const response = await request.get('/api/datasets', {
+        params: {
+          page,
+          size
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.data.success) {
+        const { content, totalElements, number, size } = response.data.data;
+        setDatasets(content || []);
+        setPagination({
+          current: number + 1,
+          pageSize: size,
+          total: totalElements
+        });
+      } else {
+        message.error(response.data.message || '获取数据集列表失败');
+      }
     } catch (error) {
+      console.error('获取数据集列表失败:', error);
       message.error('获取数据集列表失败');
     } finally {
       setLoading(false);
@@ -30,12 +55,33 @@ const DatasetManagement = () => {
   }, []);
 
   // 上传数据集
-  const handleUpload = async (info) => {
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} 上传成功`);
-      fetchDatasets(); // 刷新列表
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} 上传失败`);
+  const handleUpload = async (options) => {
+    const { file, onSuccess, onError } = options;
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('name', file.name);
+      formData.append('description', '数据集描述');
+
+      const response = await request.post('/api/datasets/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (response.data.success) {
+        message.success('上传成功');
+        onSuccess(response, file);
+        fetchDatasets(pagination.current - 1, pagination.pageSize);
+      } else {
+        message.error(response.data.message || '上传失败');
+        onError(new Error('上传失败'));
+      }
+    } catch (error) {
+      console.error('上传失败:', error);
+      message.error('上传失败: ' + (error.response?.data?.message || error.message || '未知错误'));
+      onError(error);
     }
   };
 
@@ -43,8 +89,25 @@ const DatasetManagement = () => {
   const handleSearch = async (value) => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/datasets/search?keyword=${value}`);
-      setDatasets(response.data);
+      const response = await request.get(`/api/datasets/search`, {
+        params: {
+          keyword: value,
+          page: 0,
+          size: pagination.pageSize
+        }
+      });
+      
+      if (response.data.success) {
+        const { content, totalElements, number, size } = response.data.data;
+        setDatasets(content || []);
+        setPagination({
+          current: number + 1,
+          pageSize: size,
+          total: totalElements
+        });
+      } else {
+        message.error('搜索失败');
+      }
     } catch (error) {
       message.error('搜索失败');
     } finally {
@@ -61,7 +124,7 @@ const DatasetManagement = () => {
   // 下载数据集
   const handleDownload = async (datasetId) => {
     try {
-      const response = await axios.get(`/api/datasets/${datasetId}/download`, {
+      const response = await request.get(`/api/datasets/${datasetId}/download`, {
         responseType: 'blob'
       });
       
@@ -96,13 +159,16 @@ const DatasetManagement = () => {
           />
           <Upload
             name="file"
-            action="/api/datasets/upload"
-            onChange={handleUpload}
+            customRequest={handleUpload}
             showUploadList={false}
-            data={(file) => ({
-              name: file.name,
-              description: '数据集描述'
-            })}
+            onChange={(info) => {
+              if (info.file.status === 'done') {
+                message.success(`${info.file.name} 上传成功`);
+                fetchDatasets();
+              } else if (info.file.status === 'error') {
+                message.error(`${info.file.name} 上传失败`);
+              }
+            }}
           >
             <Button type="primary" icon={<UploadOutlined />}>
               上传数据集
@@ -115,6 +181,12 @@ const DatasetManagement = () => {
         grid={{ gutter: 16, column: 3 }}
         dataSource={datasets}
         loading={loading}
+        pagination={{
+          ...pagination,
+          onChange: (page, pageSize) => {
+            fetchDatasets(page - 1, pageSize);
+          }
+        }}
         renderItem={item => (
           <List.Item>
             <Card
@@ -125,7 +197,7 @@ const DatasetManagement = () => {
                   <EyeOutlined /> 查看
                 </Button>,
                 <Button type="link" onClick={() => handleDownload(item.id)}>
-                  <DownloadOutlined /> {item.downloads}
+                  <DownloadOutlined /> 下载
                 </Button>,
                 <Space>
                   <LikeOutlined /> {item.likes}

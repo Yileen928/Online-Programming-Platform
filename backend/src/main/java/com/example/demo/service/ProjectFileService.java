@@ -23,7 +23,7 @@ public class ProjectFileService {
 
     public List<ProjectFile> getProjectFiles(Long projectId) {
         log.debug("获取项目文件列表: projectId={}", projectId);
-        Project project = projectRepository.findById(projectId)
+        projectRepository.findById(projectId)
             .orElseThrow(() -> new RuntimeException("项目不存在"));
         return projectFileRepository.findByProjectIdOrderByCreatedAtDesc(projectId);
     }

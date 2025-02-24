@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.service.UserService;
 import com.example.demo.entity.User;
 import com.example.demo.model.*;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.JwtUtil;
+
 import com.example.demo.service.ProjectService;
 import com.example.demo.entity.Project;
 import org.springframework.security.core.Authentication;
@@ -33,8 +33,6 @@ import com.example.demo.repository.UserAvatarRepository;
 @RequestMapping("/api/users")
 @Slf4j
 public class UserController {
-
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;

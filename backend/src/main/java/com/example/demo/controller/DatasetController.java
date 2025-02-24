@@ -6,6 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+import com.example.demo.security.CustomUserDetails;
+import com.example.demo.dto.ApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 @RestController
 @RequestMapping("/api/datasets")
@@ -19,12 +25,13 @@ public class DatasetController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("name") String name,
             @RequestParam("description") String description,
-            @RequestParam("uploadedBy") String uploadedBy) {
+            Authentication authentication) {
         try {
-            Dataset dataset = datasetService.uploadDataset(file, name, description, uploadedBy);
-            return ResponseEntity.ok(dataset);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Dataset dataset = datasetService.uploadDataset(file, name, description, userDetails.getUserId().toString());
+            return ResponseEntity.ok(new ApiResponse(true, dataset, "数据集上传成功"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("上传失败：" + e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, "上传失败: " + e.getMessage()));
         }
     }
 
@@ -38,8 +45,13 @@ public class DatasetController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllDatasets() {
-        return ResponseEntity.ok(datasetService.getAllDatasets());
+    public ResponseEntity<?> getAllDatasets(@PageableDefault(size = 10) Pageable pageable, Authentication authentication) {
+        try {
+            Page<Dataset> datasets = datasetService.getAllDatasets(pageable);
+            return ResponseEntity.ok(new ApiResponse(true, datasets, "获取成功"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -49,7 +61,12 @@ public class DatasetController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchDatasets(@RequestParam String keyword) {
-        return ResponseEntity.ok(datasetService.searchDatasets(keyword));
+    public ResponseEntity<?> searchDatasets(@RequestParam String keyword, @PageableDefault(size = 10) Pageable pageable) {
+        try {
+            Page<Dataset> datasets = datasetService.searchDatasets(keyword, pageable);
+            return ResponseEntity.ok(new ApiResponse(true, datasets, "搜索成功"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, null, e.getMessage()));
+        }
     }
 } 

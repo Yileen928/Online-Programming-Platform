@@ -37,6 +37,9 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/users/avatars/**").permitAll()
+                .antMatchers("/api/datasets/**").authenticated()
                 .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
                 .antMatchers("/uploads/**").permitAll()
                 .antMatchers("/api/upload/**").authenticated()
@@ -44,9 +47,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/projects/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/projects/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/projects/**").authenticated()
-                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/files/**").permitAll()
-                .antMatchers("/api/users/avatars/**").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(handling -> handling
