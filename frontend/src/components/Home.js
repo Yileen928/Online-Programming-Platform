@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input, Select, Radio, Button, Tabs, Card, Row, Col, Tag, message, Modal, Popconfirm, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import './SideBar.css';
 import { userApi } from '../api/user';
 import GitHubConnect from './github/GitHubConnect';
 import RepoList from './github/RepoList';
@@ -283,28 +284,38 @@ const Home = () => {
             <div className="form-left">
               <Select
                 placeholder="选择模版"
-                style={{ width: '100%' }}
+                style={{ width: '50%' }}
                 onChange={value => setSelectedTemplate(value)}
               >
                 <Option value="python">Python</Option>
                 <Option value="c">C</Option>
                 <Option value="java">Java</Option>
               </Select>
+            </div>
+            <div className="form-right">
               <Input
                 placeholder="项目标题"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 className="project-title-input dark"
               />
-            </div>
-            <div className="form-right">
               <div className="privacy-options">
                 <Radio.Group
                   value={isPublic}
                   onChange={(e) => setIsPublic(e.target.value)}
                 >
-                  <Radio value={true}>公开</Radio>
-                  <Radio value={false}>隐私</Radio>
+                  <Radio value={true}>
+                    公开
+                    <div className="privacy-description">
+                      任何人都可以查看和分享这个项目。
+                    </div>
+                  </Radio>
+                  <Radio value={false}>
+                    隐私
+                    <div className="privacy-description">
+                      只有您可以查看和编辑这个项目。
+                    </div>
+                  </Radio>
                 </Radio.Group>
               </div>
             </div>
@@ -312,10 +323,15 @@ const Home = () => {
           <Button 
             type="primary" 
             className="create-button"
+<<<<<<< Updated upstream
             onClick={handleCreateProject}
             disabled={!selectedTemplate || !projectName.trim()}
           >
             创建项目
+=======
+          >
+            CODE
+>>>>>>> Stashed changes
           </Button>
         </div>
       ),

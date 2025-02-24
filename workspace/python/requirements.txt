@@ -1,0 +1,20 @@
+# 数据处理和分析
+numpy
+pandas
+scipy
+
+# 数据可视化
+matplotlib
+seaborn
+
+# Web 开发
+flask
+requests
+
+# 工具包
+pillow
+openpyxl
+
+# 其他实用工具
+tqdm
+python-dateutil
