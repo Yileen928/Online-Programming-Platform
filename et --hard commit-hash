@@ -1,0 +1,265 @@
+[33mcommit d77abba1ccba4bdaedbe4db264e05781111acc33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtemp_merge_miao[m[33m, [m[1;31morigin/temp_merge_miao[m[33m, [m[1;32mzhangfufu[m[33m)[m
+Author: zhangfufu <zhangfu128zf@gmail.com>
+Date:   Sun Feb 23 20:32:55 2025 +0800
+
+    css与js更改
+
+[33mcommit 8b29b7511da92f61e5fd3cac31389e2cf046da47[m
+Author: magicLC <1009973870@qq.com>
+Date:   Sun Feb 16 00:11:18 2025 +0800
+
+    设置功能，添加mongodb存放头像,初步完成数据集功能
+
+[33mcommit 1b047d9da49c28663c5ba04a411d0f356e3c792b[m
+Author: magicLC <1009973870@qq.com>
+Date:   Thu Feb 13 23:36:15 2025 +0800
+
+    设置修改功能
+
+[33mcommit c2b343ca86befe7b72cdbbeb73189a917ee66981[m
+Author: magicLC <1009973870@qq.com>
+Date:   Mon Feb 10 19:13:48 2025 +0800
+
+    jwt实现控制，项目创建、删除功能
+
+[33mcommit 6e9fd3643412f46a0a1bfb1c89163c0d7ab1255d[m
+Merge: e5b22e9 0ed5c89
+Author: magicLC <lcw6982@outlook.com>
+Date:   Thu Feb 6 13:52:36 2025 +0800
+
+    修改增加功能
+
+[33mcommit e5b22e918152a039201b1bbb3410d6dbd6519016[m
+Author: magicLC <lcw6982@outlook.com>
+Date:   Sun Jan 26 14:58:28 2025 +0800
+
+    feat: add JWT filter, trigger.sql and global css
+
+[33mcommit 0ed5c899bf6032836efb47c30729065282411b83[m[33m ([m[1;31morigin/miao[m[33m)[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Sat Jan 25 19:24:54 2025 +0800
+
+    create project
+
+[33mcommit ad6f626e5acec9e1b47e0adb8cb4d27a5763c113[m
+Author: magicLC <lcw6982@outlook.com>
+Date:   Thu Jan 23 17:24:46 2025 +0800
+
+    创建仓库
+
+[33mcommit ba4f28f2d1cf9909ebbcace96078a6ddb1077717[m
+Author: magicLC <lcw6982@outlook.com>
+Date:   Thu Jan 23 15:34:58 2025 +0800
+
+    添加gitee导入功能
+
+[33mcommit 90c28277d7dd9c3afc896f6ac2f9b1ada9de784b[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Thu Jan 23 14:54:43 2025 +0800
+
+    feat: 添加项目创建功能
+
+[33mcommit b365598692ee45531c1fe1212dc01372eff269a2[m
+Author: magicLC <lcw6982@outlook.com>
+Date:   Mon Jan 20 21:44:36 2025 +0800
+
+    feat: 完成GitHub仓库列表功能
+
+[33mcommit bbb9c27f62f0019c07875b85a589e42f6de28019[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Sat Jan 18 22:54:37 2025 +0800
+
+    修复登录功能
+
+[33mcommit bf6e330638b3273f676cbb16da6e9af921759961[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Sat Jan 18 22:42:02 2025 +0800
+
+    更新登录验证逻辑
+
+[33mcommit 6fc0152d2a5f940e3ae908291fbe3fc198d37707[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Sat Jan 18 22:01:22 2025 +0800
+
+    初始化提交
+
+[33mcommit a4b45ad32ce5b2d7d5e017a4762a14928d3ff30e[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Fri Jan 17 21:56:19 2025 +0800
+
+    更新登录验证逻辑
+
+[33mcommit 856269983db9b77902832e0edb3efad52fd6c648[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Fri Jan 17 21:17:16 2025 +0800
+
+    解决合并冲突
+
+[33mcommit fc5cb06582c832a36f1f5a5ca38abe7fc0849ae4[m
+Merge: f6ae7c8 3dd847c
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Fri Jan 17 21:16:58 2025 +0800
+
+    解决合并冲突
+
+[33mcommit f6ae7c8c9d45f8398cb238bf280f40236ec41ce2[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Fri Jan 17 21:15:28 2025 +0800
+
+    本地修改
+
+[33mcommit dc1077dc3d8a520ffcf0dae903dc634ad25ef6ea[m
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Tue Jan 14 15:55:11 2025 +0800
+
+    Merge branch 'LC' of github.com:Yileen928/Online-Programming-Platform into LC
+
+[33mcommit 20a533c49601748d141270cdf4c4c1efae160bbe[m
+Merge: fcbffcd 89abba9
+Author: L <154652477+Chuanwang1@users.noreply.github.com>
+Date:   Tue Jan 14 00:22:42 2025 +0800
+
+    更新代码：移除密码加密，修复登录功能
+
+[33mcommit 3dd847cf4afe6161cab92b3a765936b2358bae95[m
+Merge: 4fe5917 f1c8747
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:51:07 2025 +0800
+
+    chore: 更新 .gitignore 并解决冲突
+
+[33mcommit 4fe5917214c0bdd08f4d8d2cab35221024e1de12[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:49:16 2025 +0800
+
+    chore: 添加 .DS_Store 到 .gitignore
+
+[33mcommit f1c87470089450572eefe11f324e1d5f23c44e55[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:47:19 2025 +0800
+
+    chore: 忽略 .DS_Store 文件
+
+[33mcommit 0f3896e7ce776d88bc4afca4b5ee54a1db0f1e5d[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:46:08 2025 +0800
+
+    feat: 重构项目结构和样式
+    
+    - 登录页面重构和优化
+    - 统一导航栏布局
+    - 添加代码高亮主题
+    - 优化项目结构
+
+[33mcommit 2ef73a03a44d80a26130a7f7e30296ec96cfe6cd[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:43:31 2025 +0800
+
+    feat: 重构项目结构和样式
+    
+    - 登录页面重构
+      - 优化布局和视觉效果
+      - 添加代码展示区域
+      - 更新 logo 和图片路径
+    - 统一导航栏
+      - 实现 MainLayout 布局
+      - 修复重复导航栏问题
+    - 代码高亮优化
+      - 添加 Prism.js 主题
+      - 自定义代码颜色方案
+    - 项目结构优化
+      - 统一组件结构
+      - 规范文件组织
+
+[33mcommit a019c94ee47c23f3de2ce06e71ff0d2b81e6fbc2[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 21:37:59 2025 +0800
+
+    feat: 优化登录页面样式和布局
+    
+    - 更新登录页面样式
+      - 修改背景色为纯黑
+      - 添加白色登录区域和模糊效果
+      - 优化表单布局和间距
+      - 修复 logo 图片路径
+    - 优化代码展示区域
+      - 调整代码高亮颜色
+      - 更新 Prism.js 主题配置
+    - 统一组件布局结构
+
+[33mcommit 3c57538bd48e435d248cb386eb96863bfc6ff667[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 19:12:14 2025 +0800
+
+    feat: 优化页面样式和布局
+    
+    - 更新登录页面样式
+      - 调整登录区域圆角和背景色
+      - 优化代码展示区域布局比例
+    - 添加 Prism.js 代码高亮主题
+    - 统一导航栏布局
+    - 修复组件结构
+
+[33mcommit 64b0433259afb652620165e07cd895142753620f[m[33m ([m[1;31morigin/zhangfufu[m[33m)[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 18:47:49 2025 +0800
+
+    feat: 统一导航栏布局和代码样式
+    
+    - 添加统一的 MainLayout 组件
+    - 移除各组件中重复的导航栏
+    - 添加 Prism.js 代码高亮主题
+    - 修复团队管理和项目管理组件布局
+
+[33mcommit 00559f7297dc06f707881d6e5b964fafcc48cf22[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 17:28:56 2025 +0800
+
+    feat: 优化登录页面代码展示效果
+    
+    1. 使用 Press Start 2P 像素字体
+    2. 优化代码高亮显示
+    3. 调整背景和布局
+    4. 增强代码展示区域的视觉效果
+
+[33mcommit 8e3d70e552ce2e03f40e6acf8f35ad7dadc43b8b[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 17:01:34 2025 +0800
+
+    feat: 优化字体加载方式
+    
+    1. 使用 styled-components 管理字体加载
+    2. 优化字体文件导入方式
+    3. 移除重复的字体声明
+    4. 调整字体应用样式
+
+[33mcommit 83667da7554bcfd0bb57df3705a2008b73125ca8[m
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 16:51:00 2025 +0800
+
+    feat: 添加像素字体并应用到代码展示区域
+    
+    1. 添加 AaWeiWeiDianZhenTi 字体文件
+    2. 配置字体加载
+    3. 应用字体到代码展示区域
+    4. 优化字体显示效果
+
+[33mcommit 465e678196ae4c7051d51ab3f0096a02ed9426ca[m
+Merge: 44166e6 ad8d804
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 12:23:29 2025 +0800
+
+    Merge branch 'LC' into miao
+    必须提交
+
+[33mcommit 44166e667a66adaa5f422f131655ee6ecbc11ee6[m
+Merge: 6406fd2 89abba9
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon Jan 13 12:22:52 2025 +0800
+
+    Merge branch 'miao' of https://github.com/Yileen928/Online-Programming-Platform into miao
+
+[33mcommit ad8d804d5ba21e1f42823193dd40e192f5b6a681[m
+Merge: d691852 6406fd2
+Author: Yileen928 <Yileenbrave@gmail.com>
+Date:   Mon
