@@ -29,14 +29,11 @@ request.interceptors.request.use(
 // 响应拦截器
 request.interceptors.response.use(
   response => {
-    return response.data;
+    return response.data;  // 直接返回响应数据
   },
   error => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
+    console.error('请求错误:', error);
+    throw error?.response?.data || error;
   }
 );
 

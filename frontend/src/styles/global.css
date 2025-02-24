@@ -1,0 +1,15 @@
+@media (forced-colors: active) {
+  :root {
+    forced-color-adjust: none;
+  }
+  
+  /* 确保按钮在高对比度模式下仍然可见 */
+  .ant-btn {
+    forced-color-adjust: none;
+  }
+
+  /* 确保输入框在高对比度模式下仍然可见 */
+  .ant-input {
+    forced-color-adjust: none;
+  }
+} 
