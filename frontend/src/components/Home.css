@@ -19,19 +19,23 @@ body {
 /* 搜索区域 */
 .header-search {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 水平居中 */
   align-items: center;
   margin-bottom: 24px;
 }
 
 .search-input {
   width: 300px;
+  background-color: #f7f7f7; /* 输入框背景色 */
+  color: #000; /* 输入框文字颜色 */
+  border: 1px solid #ccc; /* 边框颜色 */
 }
 
-.header-icons {
-  display: flex;
-  gap: 16px;
-  align-items: center;
+.search-icon {
+  background-color: #fff; /* 图标背景色 */
+  color: #000; /* 图标颜色 */
+  padding: 8px;
+  border-radius: 50%;
 }
 
 .avatar {
@@ -102,7 +106,7 @@ body {
 }
 
 .privacy-options .ant-radio-wrapper-checked {
-  background: #3d3d3d;
+  background-color: transparent !important;
 }
 
 .privacy-options .ant-radio {
@@ -138,12 +142,14 @@ body {
 }
 
 .create-button {
-  width: 50%;
+  width: 200px;
   height: 40px;
-  background: #8b3e3e !important;
+  background: #8b3e3e;
   border: none;
   border-radius: 10px;
   color: #fff;
+  margin-top: 16px; /* 添加一些间距 */
+  display: block; /* 确保按钮在容器内对齐 */
 }
 
 .create-button:hover {
@@ -357,4 +363,36 @@ h3 {
 }
 .template-content {
   background-color: black; /* 修改为黑色 */
+}
+.radio-button {
+  background-color: transparent !important; /* 默认背景色 */
+}
+
+.radio-button:focus,
+.radio-button:active {
+  background-color: transparent !important; /* 去除选中时的背景色变化 */
+}
+.create-button {
+  width: 200px;
+  height: 40px;
+  background: #8b3e3e;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  margin-top: 16px; /* 添加一些间距 */
+}
+.form-right {
+  display: flex;
+  flex-direction: column; /* 垂直排列子元素 */
+  height: 100%; /* 确保容器占满可用空间 */
+}
+
+.create-button {
+  width: 200px;
+  height: 40px;
+  background: #8b3e3e;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  margin-top: auto; /* 将按钮推到容器底部 */
 }
