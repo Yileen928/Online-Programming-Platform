@@ -302,6 +302,14 @@ const Home = () => {
               </Button>
             </div>
           </div>
+          <Button 
+            type="primary" 
+            className="create-button"
+            onClick={handleCreateProject}
+            disabled={!selectedTemplate || !projectName.trim()}
+          >
+            创建项目
+          </Button>
         </div>
       ),
     },
