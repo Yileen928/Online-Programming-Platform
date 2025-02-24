@@ -320,17 +320,12 @@ const Home = () => {
               </div>
             </div>
           </div>
-          
-          <div className="button-container">
-            <Button 
-              type="primary" 
-              className="create-button"
-              onClick={handleCreateProject}
-              disabled={!selectedTemplate || !projectName.trim()}
-            >
-              创建项目
-            </Button>
-          </div>
+          <Button 
+            type="primary" 
+            className="create-button"
+          >
+            CODE
+          </Button>
         </div>
       ),
     },
