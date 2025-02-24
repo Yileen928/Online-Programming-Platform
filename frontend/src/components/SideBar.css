@@ -156,3 +156,22 @@
   background-color: #fff !important;
   color: #1a1a1a !important;
 }
+
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 确保没有间隙 */
+  margin: 0;
+  padding: 0;
+}
+
+.header, .content {
+  margin: 0; /* 去掉外边距 */
+  padding: 0; /* 根据需要调整内边距 */
+}
+
+.ant-tabs-nav, .next-container {
+  margin: 0; /* 去掉所有外边距 */
+  padding: 0; /* 根据需要调整内边距 */
+  border-radius: 0; /* 根据需要调整圆角 */
+}
