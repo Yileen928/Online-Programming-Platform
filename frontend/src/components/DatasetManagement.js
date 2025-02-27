@@ -80,6 +80,7 @@ const DatasetManagement = () => {
   };
 
   return (
+    <div className='background-dataset'>
     <div className="dataset-container">
       <div className="dataset-header">
         <h1>数据集广场</h1>
@@ -198,6 +199,7 @@ const DatasetManagement = () => {
           </div>
         )}
       </Modal>
+    </div>
     </div>
   );
 };
