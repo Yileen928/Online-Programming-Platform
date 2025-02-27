@@ -70,6 +70,11 @@ body {
   gap: 10px;
 }
 
+.choose_m{
+  border: #fff solid;
+  height: 43px;
+  border-radius: 10px
+}
 /* 右侧区域 */
 .form-right {
   width: 50%;
@@ -78,15 +83,6 @@ body {
   gap: 10px;
 }
 
-/* 输入框和选择框 */
-.ant-select,
-.project-title-input.dark {
-  width: 100% !important;
-  background: #2d2d2d;
-  border: 1px solid #3d3d3d;
-  color: #fff;
-  border-radius: 8px !important;
-}
 
 /* 隐私选项 */
 .privacy-options {
@@ -213,6 +209,7 @@ body {
   border-color: #3d3d3d !important;
   color: #fff !important;
   height: 40px !important;
+  border: #f7f7f7 solid;
   line-height: 40px !important;
 }
 
@@ -382,11 +379,7 @@ h3 {
   color: #fff;
   margin-top: 16px; /* 添加一些间距 */
 }
-.form-right {
-  display: flex;
-  flex-direction: column; /* 垂直排列子元素 */
-  height: 100%; /* 确保容器占满可用空间 */
-}
+
 
 .create-button {
   width: 200px;
@@ -396,7 +389,4 @@ h3 {
   border-radius: 10px;
   color: #fff;
   margin-top: auto; /* 将按钮推到容器底部 */
-}
-.form-left {
-  background-color: #323232b7; /* 灰色背景 */
 }

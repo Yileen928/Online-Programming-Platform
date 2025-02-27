@@ -276,56 +276,49 @@ const Home = () => {
 
   const items = [
     {
-      key: 'template',
-      label: '选择模版',
-      children: (
-        <div className="template-content">
-          <div className="template-form">
-            <div className="form-left">
-              <Select
-                placeholder="选择模版"
-                style={{ width: '100%' }}
-                onChange={value => setSelectedTemplate(value)}
-              >
-                <Option value="python">Python</Option>
-                <Option value="c">C</Option>
-                <Option value="java">Java</Option>
-              </Select>
-            </div>
-            <div className="form-right">
-              <Input
-                placeholder="项目标题"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-                className="project-title-input dark"
-              />
-              <div className="privacy-options">
-                <Radio.Group
-                  value={isPublic}
-                  onChange={(e) => setIsPublic(e.target.value)}
+        key: 'template',
+        label: '选择模版',
+        children: (
+          <div className="template-content">
+            <div className="template-form">
+              <div className="form-left">
+                <Select className='choose_m'
+                  placeholder="选择模版"
+                  style={{ width: '100%' }}
+                  onChange={value => setSelectedTemplate(value)}
                 >
-                  <Radio value={true}>公开</Radio>
-                  <Radio value={false}>隐私</Radio>
-                </Radio.Group>
+                  <Option value="python">Python</Option>
+                  <Option value="c">C</Option>
+                  <Option value="java">Java</Option>
+                </Select>
               </div>
-              <Button 
-                type="primary" 
-                className="create-button"
-                onClick={handleCreateProject}
-                disabled={!selectedTemplate || !projectName.trim()}
-              >
-                创建项目
-              </Button>
+              <div className="form-right">
+                <Input 
+                  placeholder="项目标题"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="project-title-input dark"
+                />
+                <div className="privacy-options">
+                  <Radio.Group
+                    value={isPublic}
+                    onChange={(e) => setIsPublic(e.target.value)}
+                  >
+                    <Radio value={true}>公开</Radio>
+                    <Radio value={false}>隐私</Radio>
+                  </Radio.Group>
+                </div>
+                <Button 
+                  type="primary" 
+                  className="create-button" 
+                  onClick={handleCreateProject} 
+                  disabled={!selectedTemplate || !projectName.trim()}
+                >
+                  {!selectedTemplate || !projectName.trim() ? 'CODE' : '创建项目'}
+                </Button>
+
             </div>
           </div>
-          <Button
-  type="primary"
-  className="create-button"
-  onClick={handleCreateProject}
-  disabled={!selectedTemplate || !projectName.trim()}
->
-  {!selectedTemplate || !projectName.trim() ? 'CODE' : '创建项目'}
-</Button>
 
         </div>
       ),
