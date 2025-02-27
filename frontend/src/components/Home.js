@@ -309,15 +309,15 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <Button 
-            type="primary" 
-            className="create-button"
-            onClick={handleCreateProject}
-            disabled={!selectedTemplate || !projectName.trim()}
-          >
-            创建项目
-            CODE
-          </Button>
+          <Button
+  type="primary"
+  className="create-button"
+  onClick={handleCreateProject}
+  disabled={!selectedTemplate || !projectName.trim()}
+>
+  {!selectedTemplate || !projectName.trim() ? 'CODE' : '创建项目'}
+</Button>
+
         </div>
       ),
     },
