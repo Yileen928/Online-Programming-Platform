@@ -10,8 +10,13 @@
   display: flex;
   flex-direction: column;
 }
+.ant-layout-content{
+  border: 2pt rgb(66, 64, 64) solid;
+  background-color:#363636;
+}
 .ant-select{
   margin-top: 30pt;
+  
 }
 .ant-input{
   border: 2pt white solid !important;
@@ -77,5 +82,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.home-content{
+  border: #363636;
+  background-color: #2b2a2ae7;
+}
+.header-search{
+  border: #313131;
+  background-color: #2e2d2d;
+  border: 1px solid black;
+  padding: 5pt;
+  border-radius: 24px !important;
+
+  
+
 }
 

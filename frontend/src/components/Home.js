@@ -257,7 +257,8 @@ messageApi.error('请选择模板并输入项目名称');
         key: 'template',
         label: '选择模版',
         children: (
-          <div className="template-content">
+          
+                    <div className="template-content">
            
               <div className="form-left">
                 <Select className='choose_m'
@@ -340,7 +341,9 @@ messageApi.error('请选择模板并输入项目名称');
   ];
 
   return (
-    <div className="home-content dark">
+    <div className='fa-con'>
+      <div className='background-home'>
+       <div className="home-content dark">
       <div className="header-search">
         <Search 
           placeholder="search for projects" 
@@ -359,8 +362,10 @@ messageApi.error('请选择模板并输入项目名称');
           </Avatar.Group>
         </div>
       </div>
-
+      
       <Tabs items={items} />
+       </div>  
+      </div>
       
       <div className="recent-projects">
         <h3>最近的项目 ({recentProjects.length})</h3>
@@ -449,7 +454,7 @@ messageApi.error('请选择模板并输入项目名称');
           </Radio.Group>
         </div>
       </Modal>
-    </div>
+      </div>
   );
 };
 
