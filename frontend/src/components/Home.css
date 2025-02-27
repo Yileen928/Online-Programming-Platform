@@ -1,392 +1,81 @@
-/* 整体布局 */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1a1a1a;
+.ant-modal-content {
+  padding: 20px;
 }
 
-.home-layout {
-  min-height: 100vh;
-}
-
-.home-content.dark {
-  padding: 24px;
-  min-height: 100vh;
-  background: #1a1a1a;
-}
-
-/* 搜索区域 */
-.header-search {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.search-input {
-  width: 300px;
-  background-color: #f7f7f7; /* 输入框背景色 */
-  color: #000; /* 输入框文字颜色 */
-  border: 1px solid #ccc; /* 边框颜色 */
-}
-
-.search-icon {
-  background-color: #fff; /* 图标背景色 */
-  color: #000; /* 图标颜色 */
-  padding: 8px;
-  border-radius: 50%;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #333;
-}
-
-/* 主要内容区域 */
-.template-content {
-  background: #1e1e1e;
-  padding: 24px;
-  border-radius: 8px;
-}
-
-/* 表单布局 */
-.template-form {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
-/* 左侧区域 */
-.form-left {
-  width: 50%;
+.ant-input,
+.ant-select,
+.ant-radio-group {
+  width: 100%;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+.ant-select{
+  margin-top: 30pt;
+}
+.ant-input{
+  border: 2pt white solid !important;
 }
 
-.choose_m{
-  border: #fff solid;
-  height: 43px;
-  border-radius: 10px
+.ant-tabs-content-holder {
+  border: solid;
+  height: 55vh;
 }
-/* 右侧区域 */
+
+.create-button {
+  margin-top: 20px;
+}
+.template-content, .github-content, .gitee-content {
+  display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 55vh;
+    border: 2pt rgb(147, 95, 95) solid;
+}
+
+.form-left, .form-right {
+  border: 2pt rgb(61, 198, 48) solid;
+}
+
+.form-left {
+  width: 50%;
+  padding-right: 10px;
+}
+
 .form-right {
   width: 50%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
+.choose_m {
+  width: 100%;
+}
 
-/* 隐私选项 */
+.project-title-input {
+  margin-top: 10px;
+}
+
 .privacy-options {
-  margin-top: 24px;
-}
-.privacy-options .ant-radio-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  width: 100%;
-  margin: 8px 0;
-  border-radius: 4px;
-  background: #060404;
-  transition: all 0.3s ease;
-}
-.privacy-options .ant-radio-wrapper:hover {
-  background: #040404;
-}
-
-.privacy-options .ant-radio-wrapper-checked {
-  background-color: transparent !important;
-}
-
-.privacy-options .ant-radio {
-  margin-right: 12px;
-}
-
-.privacy-options .ant-radio-wrapper span:last-child {
-  flex: 1;
-}
-* 添加描述文本样式 */
-.privacy-description {
-  color: #0a0a0adb;
-  font-size: 12px;
-  margin-top: 4px;
-  margin-left: 24px;
-}
-
-/* CODE按钮 */
-.button-container {
-  display: flex;
-  justify-content: right;
-  width: 100%;
-  margin-top: 24px;
-}
-
-.create-button {
-  width: 200px;  /* 设置固定宽度而不是50% */
-  height: 40px;
-  background: #8b3e3e !important;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-}
-
-.create-button {
-  width: 200px;
-  height: 40px;
-  background: #8b3e3e;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  margin-top: 16px; /* 添加一些间距 */
-  display: block; /* 确保按钮在容器内对齐 */
-}
-
-.create-button:hover {
-  background: #a04848 !important;
-}
-
-.create-button:disabled {
-  background: #4d3232 !important;
-  color: #888;
-}
-
-/* 最近项目区域 */
-.recent-projects {
-  margin-top: 24px;
+  margin-top: 10px;
 }
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 24px;
-  margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 使用网格布局来适应不同的屏幕大小 */
+  gap: 20px;
 }
 
 .project-card {
-  background: #2a2a2a;
-  border: none;
-  border-radius: 8px;
-  padding: 16px;
-}
-
-.project-icon {
-  width: 40px;
-  height: 40px;
-  background: #333;
-  border-radius: 8px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.project-info h4 {
-  margin: 0;
-  color: #fff;
-}
-
-.project-info p {
-  margin: 8px 0;
-  color: #999;
-}
-
-.project-time {
-  color: #666;
-  font-size: 12px;
-}
-
-/* antd样式覆盖 */
-.ant-select-selector {
-  background: #2d2d2d !important;
-  border-color: #3d3d3d !important;
-  color: #fff !important;
-  height: 40px !important;
-  border: #f7f7f7 solid;
-  line-height: 40px !important;
-}
-
-.ant-select-selection-item {
-  line-height: 38px !important;
-}
-
-.ant-input {
-  background: #2d2d2d !important;
-  border-color: #3d3d3d !important;
-  color: #fff !important;
-}
-
-.ant-radio-wrapper {
-  color: #fff !important;
-}
-
-.ant-tabs-tab {
-  color: #888 !important;
-}
-
-.ant-tabs-tab-active {
-  color: #fff !important;
-}
-
-.ant-tabs-ink-bar {
-  background: #8b3e3e !important;
-}
-
-/* 选项样式 */
-.template-option {
+.card-actions {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-.template-option:hover {
-  background: #3d3d3d;
-}
-
-.template-option img {
-  width: 20px;
-  height: 20px;
-}
-
-/* antd菜单样式覆盖 */
-:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item,
-:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item {
-  color: #fff !important;
-}
-
-:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item-selected,
-:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item-selected {
-  background-color: #fff !important;
-  color: #1a1a1a !important;
-}
-
-/* 标签页样式 */
-.ant-tabs-nav {
-  margin-bottom: 24px !important;
-}
-
-.ant-tabs-nav::before {
-  border-bottom: 1px solid #2f2f2f !important;
-}
-
-/* 选择框下拉菜单样式 */
-.ant-select-dropdown {
-  background-color: #2d2d2d !important;
-}
-
-.ant-select-item {
-  color: #fff !important;
-}
-
-.ant-select-item-option-selected {
-  background-color: #3d3d3d !important;
-}
-
-.ant-select-item-option-active {
-  background-color: #4d4d4d !important;
-}
-
-/* 标签样式 */
-.ant-tabs {
-  color: #fff;
-}
-
-.ant-tabs-tab {
-  padding: 12px 0 !important;
-  margin: 0 32px 0 0 !important;
-}
-
-.ant-tabs-tab:hover {
-  color: #fff !important;
-}
-
-.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #fff !important;
-}
-
-/* 选择框和输入框的占位符文字颜色 */
-.ant-select-selection-placeholder,
-.ant-input::placeholder {
-  color: #666 !important;
-}
-
-/* 下拉箭头颜色 */
-.ant-select-arrow {
-  color: #666 !important;
-}
-
-/* 单选框样式 */
-.ant-radio-inner {
-  background-color: #2d2d2d !important;
-  border-color: #3d3d3d !important;
-}
-
-.ant-radio-checked .ant-radio-inner {
-  border-color: #8b3e3e !important;
-}
-
-.ant-radio-inner::after {
-  background-color: #8b3e3e !important;
-}
-
-/* 标题和描述文字样式 */
-h3 {
-  color: #fff;
-  margin-bottom: 16px;
-}
-
-.description {
-  color: #888;
-  margin-bottom: 24px;
-}.ant-layout-content {
-  background-color: rgba(63, 62, 62, 0.637);
-}
-.home-content.dark {
-  padding: 24px;
-  min-height: 100vh;
-  background: rgba(61, 60, 60, 0.394); /* 修改为灰色 */
-}
-.ant-tabs {
-  background-color: black; /* 修改为黑色 */
-}
-.template-content {
-  background-color: black; /* 修改为黑色 */
-}
-.radio-button {
-  background-color: transparent !important; /* 默认背景色 */
-}
-
-.radio-button:focus,
-.radio-button:active {
-  background-color: transparent !important; /* 去除选中时的背景色变化 */
-}
-.create-button {
-  width: 200px;
-  height: 40px;
-  background: #8b3e3e;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  margin-top: 16px; /* 添加一些间距 */
-}
-
-
-.create-button {
-  width: 200px;
-  height: 40px;
-  background: #8b3e3e;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  margin-top: auto; /* 将按钮推到容器底部 */
-}

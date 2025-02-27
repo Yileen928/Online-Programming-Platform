@@ -50,34 +50,12 @@ const Home = () => {
     fetchProjects();
   }, []);
 
-  const fetchRecentProjects = async () => {
-    try {
-      const response = await userApi.getRecentProjects();
-      setRecentProjects(response || []);
-    } catch (error) {
-      messageApi.error('获取最近项目失败');
-    }
-  };
-
-  const fetchProjects = async () => {
-    try {
-      const response = await projectApi.getProjects();
-      // 从response.data中获取项目列表
-      const projectList = response.data?.data || [];
-      const uniqueProjects = Array.from(
-        new Map(projectList.map(project => [project.id, project])).values()
-      );
-      setProjects(uniqueProjects);
-    } catch (error) {
-      console.error('获取项目列表失败:', error);
-      messageApi.error('获取项目列表失败');
-    }
-  };
-
-  const handleCreateProject = async () => {
-    try {
-      if (!selectedTemplate || !projectName.trim()) {
-        messageApi.error('请选择模板并输入项目名称');
+  const fetchRecentProjects = async () => {try {const response = await userApi.getRecentProjects();setRecentProjects(response || []);} catch (error) {messageApi.error('获取最近项目失败');}};
+  const fetchProjects = async () => {try { const response = await projectApi.getProjects();
+  const projectList = response.data?.data || [];
+  const uniqueProjects = Array.from(new Map(projectList.map(project => [project.id, project])).values());setProjects(uniqueProjects);} catch (error) {console.error('获取项目列表失败:', error);messageApi.error('获取项目列表失败');}};
+  const handleCreateProject = async () => {try {if (!selectedTemplate || !projectName.trim()) {
+messageApi.error('请选择模板并输入项目名称');
         return;
       }
 
@@ -280,7 +258,7 @@ const Home = () => {
         label: '选择模版',
         children: (
           <div className="template-content">
-            <div className="template-form">
+           
               <div className="form-left">
                 <Select className='choose_m'
                   placeholder="选择模版"
@@ -320,7 +298,7 @@ const Home = () => {
             </div>
           </div>
 
-        </div>
+   
       ),
     },
     {
