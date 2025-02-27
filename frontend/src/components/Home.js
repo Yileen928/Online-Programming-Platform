@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input, Select, Radio, Button, Tabs, Card, Row, Col, Tag, message, Modal, Popconfirm, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import './SideBar.css';
 import { userApi } from '../api/user';
 import GitHubConnect from './github/GitHubConnect';
 import RepoList from './github/RepoList';
@@ -290,14 +291,14 @@ const Home = () => {
                 <Option value="c">C</Option>
                 <Option value="java">Java</Option>
               </Select>
+            </div>
+            <div className="form-right">
               <Input
                 placeholder="项目标题"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 className="project-title-input dark"
               />
-            </div>
-            <div className="form-right">
               <div className="privacy-options">
                 <Radio.Group
                   value={isPublic}
@@ -307,6 +308,14 @@ const Home = () => {
                   <Radio value={false}>隐私</Radio>
                 </Radio.Group>
               </div>
+              <Button 
+                type="primary" 
+                className="create-button"
+                onClick={handleCreateProject}
+                disabled={!selectedTemplate || !projectName.trim()}
+              >
+                创建项目
+              </Button>
             </div>
           </div>
           <Button

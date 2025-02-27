@@ -5,7 +5,7 @@
   bottom: 0;
   width: 200px;
   background: #1a1a1a;
-  border-right: 1px solid #333;
+  border-right: 1px solid #1f2020a6;
   z-index: 1000;
 }
 
@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #2f2f2f;
 }
 
 .logo h1 {
@@ -24,6 +24,135 @@
   font-size: 18px;
 }
 
-.sidebar-menu {
-  border-right: none !important;
-} 
+
+/* 重写 antd Menu 样式 */
+.sidebar .ant-menu {
+  background: transparent;
+  border-right: none;
+  padding-left: 25px;
+}
+
+.sidebar .ant-menu-item {
+  height: 30px !important;
+  line-height: 60px !important;
+  padding-inline: 20px !important;
+  margin-inline: 20px !important;
+  margin-block: 15px !important;
+  width: calc(100% - 8px) !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px !important;
+  position: relative !important;
+  overflow: visible !important;
+  margin-right: 16px !important;
+}
+.sidebar .ant-menu-item .anticon,
+.logout-button .anticon {
+  color: #fff !important;
+  font-size: 16px !important;
+  margin-right: 12px !important;
+}
+.sidebar .ant-menu-item:hover {
+  background-color: #fff !important;
+  color: #1a1a1a !important;
+}
+
+/* 菜单项选中时的样式 */
+.sidebar .ant-menu-item.ant-menu-item-selected {
+  background-color: #f0ececf5 !important;
+  color: #0e0c0c !important;
+}
+
+.sidebar .ant-menu-item.ant-menu-item-selected .anticon {
+  color: #060505 !important;
+}
+
+/* 图标悬停和选中时的颜色 */
+
+.logout-button:hover {
+  background-color: #080707;
+  color: #1a1a1a;
+}
+
+.logout-button:hover .anticon {
+  color: #1a1a1a !important;
+}
+
+/* 覆盖 antd 的默认主题样式 */
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item {
+  color: #fff !important;
+}
+
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  background-color: #08070772 !important;
+  color: #aa1919 !important;
+}
+
+.sidebar .ant-menu-item-selected::before {
+  content: '';
+  position: absolute;
+  right: 16px;  /* 调整三角形位置 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid #0c0c0c;  /* 使用选中状态的文字颜色 */
+  pointer-events: none;
+  z-index: 1;
+}
+.sidebar .ant-menu-item:hover {
+  background-color: #aba9a9ed !important;
+  color: #1a1a1a !important;
+}
+
+.sidebar .ant-menu-item-selected {
+  background-color: #f1e5e572 !important;
+  color: #0e0303 !important;
+  position: relative !important;
+}
+
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item {
+  color: #fff !important;
+  overflow: visible !important;
+}
+
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  background-color: #08070772 !important;
+  color: #0f0606 !important;
+}
+
+/* 移除 Ant Design 的默认选中指示器 */
+.ant-menu-item::after {
+  display: none !important;
+}
+/* 图标颜色也跟随变化 */
+.sidebar .ant-menu-item:hover .anticon,
+.sidebar .ant-menu-item-selected .anticon {
+  color: #030303ee !important;
+}
+
+.sidebar .ant-menu-item .anticon {
+  color: #f4f2f2 !important;
+}
+
+/* 覆盖 antd 的默认主题样式 */
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item {
+  color: #fff !important;
+}
+
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-177ckdb).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  background-color: #fff !important;
+  color: #1a1a1a !important;
+}

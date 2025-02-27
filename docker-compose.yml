@@ -1,0 +1,30 @@
+services:
+  python:
+    build: 
+      context: ./workspace/python
+      dockerfile: Dockerfile
+    volumes:
+      - ./workspace/python:/app
+    working_dir: /app
+    tty: true
+
+  java:
+    image: openjdk:17
+    volumes:
+      - ./workspace/java:/app
+    working_dir: /app
+    tty: true
+
+  cpp:
+    image: gcc:latest
+    volumes:
+      - ./workspace/c:/app
+    working_dir: /app
+    tty: true
+
+  golang:
+    image: golang:latest
+    volumes:
+      - ./workspace/golang:/app
+    working_dir: /app
+    tty: true 
