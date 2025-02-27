@@ -292,6 +292,7 @@ const Home = () => {
                 <Option value="java">Java</Option>
               </Select>
             </div>
+          
             <div className="form-right">
               <Input
                 placeholder="项目标题"
@@ -307,18 +308,7 @@ const Home = () => {
                   <Radio value={true}>公开</Radio>
                   <Radio value={false}>隐私</Radio>
                 </Radio.Group>
-              </div>
-              <Button 
-                type="primary" 
-                className="create-button"
-                onClick={handleCreateProject}
-                disabled={!selectedTemplate || !projectName.trim()}
-              >
-                创建项目
-              </Button>
-            </div>
-          </div>
-          <Button
+                <Button
   type="primary"
   className="create-button"
   onClick={handleCreateProject}
@@ -326,6 +316,11 @@ const Home = () => {
 >
   {!selectedTemplate || !projectName.trim() ? 'CODE' : '创建项目'}
 </Button>
+              </div>
+
+            </div>
+          </div>
+        
 
         </div>
       ),
