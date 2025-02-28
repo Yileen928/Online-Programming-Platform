@@ -12,14 +12,15 @@
 }
 .ant-layout-content{
   border: 2pt rgb(66, 64, 64) solid;
-  background-color:#363636;
+  padding: 0px;
+  background-color: #2e2d2d;
 }
 .ant-select{
-  margin-top: 30pt;
+  margin-top: 17px;
   
 }
 .ant-input{
-  border: 2pt white solid !important;
+  border: 2pt rgba(61, 61, 61, 0.661) solid !important;
 }
 
 .ant-tabs-content-holder {
@@ -35,16 +36,14 @@
     flex-direction: row;
     gap: 20px;
     height: 55vh;
-    border: 2pt rgb(147, 95, 95) solid;
+    border: #363535;
+    
 }
 
-.form-left, .form-right {
-  border: 2pt rgb(61, 198, 48) solid;
-}
 
 .form-left {
-  width: 50%;
-  padding-right: 10px;
+  width: 60%;
+ 
 }
 
 .form-right {
@@ -52,6 +51,10 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+    background-color: #000000;
+    margin: 30px;
+    padding: 3px;
+    height: 87%
 }
 
 .choose_m {
@@ -85,16 +88,76 @@
 }
 .home-content{
   border: #363636;
-  background-color: #2b2a2ae7;
+  background-color: #575656e7;
 }
 .header-search{
   border: #313131;
-  background-color: #2e2d2d;
-  border: 1px solid black;
-  padding: 5pt;
-  border-radius: 24px !important;
-
-  
+  background-color:#3d3c3c
+  ;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  padding-top: 10px;
+  padding-left: 241px;
+  margin-top: -21px;
+  margin-bottom: 0px;
+  padding-bottom: -8px;
 
 }
 
+
+
+.background-home {
+ 
+  border-radius: 24px;
+  margin: 24px;
+  padding: 20px;
+  background:  #3d3c3c;;
+  margin-right: 10px;
+  margin-left: 0px;
+  margin-top: -15px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+
+}
+.form-left{
+  background-color:#31313166;
+  margin: 30px;
+  padding: 0px;
+  height: 65%;
+  border-top: 30px;
+  
+}
+
+.ant-tabs-content-holder{
+  background-color: black;
+  border-color: #050505;
+
+}
+.ant-tabs-nav{
+  background-color: black;
+  margin-bottom: 0px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.home-content{
+  background-color: #3d3c3c;
+  border-radius: 24px;
+}
+.ant-tabs-content-holder{
+  margin-top: -24px;
+  padding-top: 18px;
+  padding-bottom: 3px;
+}
+.header-icons {
+  display: flex
+;
+  align-items: center;
+  gap: 36px;
+  flex-direction: row-reverse;
+  margin-top: -32px;
+  margin-bottom: 10px;
+  margin-right: 34px;
+}
