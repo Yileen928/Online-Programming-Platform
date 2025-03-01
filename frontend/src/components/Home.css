@@ -163,5 +163,16 @@
   margin-right: 34px;
 }
 .ant-input-affix-wrapper {
+  background-color: #000000;
   margin-right: 700px; /* 修改成你需要的值 */
+  border-color: #060505;
+}
+.gitee-content .ant-card{
+  margin-bottom: 138px;
+  background-color: #000000;
+}
+.github-content .ant-card{
+  background-color: #000000;
+  margin-right: 0px; 
+  
 }
