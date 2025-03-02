@@ -3,7 +3,7 @@
 }
 
 .ant-input,
-.ant-select,
+
 .ant-radio-group {
   width: 100%;
   margin-bottom: 16px;
@@ -47,14 +47,18 @@
 }
 
 .form-right {
-  width: 50%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   gap: 20px;
     background-color: #000000;
-    margin: 30px;
-    padding: 3px;
+    margin-bottom: 0px;
+    margin-left: -10px;
+    margin-top: 25px;
+    margin-right: 20px;
+    padding-bottom: 30px;
     height: 87%
+    
 }
 
 .choose_m {
@@ -123,9 +127,9 @@
 }
 .form-left{
   background-color:#31313166;
-  margin: 24px;
+  margin: 20px;
   padding: 0px;
-  height: 65%;
+  height: 75%;
   border-top: 30px;
   margin-bottom: 0px;
   
@@ -150,7 +154,7 @@
 .ant-tabs-content-holder{
   margin-top: -24px;
   padding-top: 18px;
-  padding-bottom: 3px;
+  padding-bottom: 0px;
 }
 .header-icons {
   display: flex
@@ -168,11 +172,65 @@
   border-color: #060505;
 }
 .gitee-content .ant-card{
-  margin-bottom: 138px;
+  margin-bottom: 160px;
   background-color: #000000;
 }
 .github-content .ant-card{
   background-color: #000000;
   margin-right: 0px; 
   
+}
+.radio-description {
+  font-size: 3px; /* 字体变小 */
+  color: #888; /* 颜色变淡 */
+  margin-top: 2px; /* 添加间距 */
+  /* 让文字独占一行 */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 增加“公开”和“隐私”的间距 */
+  margin-left: 0px; /* 控制图标与文字的间距 */
+  font-size: 10px;  /* 控制图标大小 */
+  color: rgb(84, 83, 83); /* 让图标变成白色 *//* 设置颜色，可自定义 */
+}
+.radio-icon {
+  margin-left: 5px; /* 控制图标与文字的间距 */
+  font-size: 13px;  /* 控制图标大小 */
+  color: #a8a4a4; /* 设置颜色，可自定义 */
+}
+.icon-container {
+  width: 15px;  /* 设置合适的宽度 */
+  height: 16px; /* 设置合适的高度 */
+  display: inline-block;
+  background-image: url('D:\zc\Online-Programming-Platform\frontend\src\images\diqiu.svg'); /* 替换为你的图片路径 */
+  background-size: cover;
+  margin-left: 5px; /* 控制与 "公开" 文本的间距 */
+  margin-bottom:-2.5px;
+}
+.tubiao {
+  width: 12px;  /* 设置合适的宽度 */
+  height: 12px; /* 设置合适的高度 */
+  display: inline-block;
+  background-image: url('D:\zc\Online-Programming-Platform\frontend\src\images\suo.svg'); /* 替换为你的图片路径 */
+  background-size: cover;
+  margin-left: 5px; /* 控制与 "公开" 文本的间距 */
+}
+.radio-label{
+  margin-top: -20px;
+  margin-bottom: 0px;
+  margin-right: 40px;
+  padding-left: 0px;
+}
+.ant-select{
+  border: 1px solid #fff;
+  background: #1a1a1a;
+}
+.ant-radio-group{
+  margin: 7px;
+    padding: 0px;
+    color: #fff;
+    font-size: 14px;
+}
+.radio-description{
+  margin: 0px;
+    padding: 0px;
 }

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
     "antd": "^5.23.0",
     "axios": "^1.7.9",
     "react-scripts": "^5.0.1"

@@ -12,6 +12,8 @@ import GiteeRepoList from '../components/gitee/GiteeRepoList';
 import CreateGiteeRepo from '../components/gitee/CreateGiteeRepo';
 import { useMessage } from '../hooks/useMessage';
 import { projectApi } from '../api/project';
+import { UnlockOutlined, LockOutlined } from '@ant-design/icons';
+import { GlobalOutlined } from '@ant-design/icons';
 import { 
   JavaOutlined, 
   PythonOutlined,
@@ -261,6 +263,7 @@ messageApi.error('请选择模板并输入项目名称');
                     <div className="template-content">
            
               <div className="form-left">
+              
                 <Select className='choose_m'
                   placeholder="选择模版"
                   style={{ width: '100%' }}
@@ -272,21 +275,34 @@ messageApi.error('请选择模板并输入项目名称');
                 </Select>
               </div>
               <div className="form-right">
+
                 <Input 
                   placeholder="项目标题"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   className="project-title-input dark"
                 />
-                <div className="privacy-options">
-                  <Radio.Group
-                    value={isPublic}
-                    onChange={(e) => setIsPublic(e.target.value)}
-                  >
-                    <Radio value={true}>公开</Radio>
-                    <Radio value={false}>隐私</Radio>
-                  </Radio.Group>
-                </div>
+               <div className="privacy-options">
+  <Radio.Group value={isPublic} onChange={(e) => setIsPublic(e.target.value)}>
+    <Radio value={true}>
+      <div className="radio-label">
+        公开
+        <div className="icon-container"></div> {/* 新增的容器 */}
+      </div>
+      <div className="radio-description">任何人都可以查看和分支这个项目</div>
+    </Radio>
+    <Radio value={false}>
+      <div className="radio-label">
+        隐私
+        <div className="tubiao"></div>
+      </div>
+      <div className="radio-description">只有您可以查看和编辑这个项目</div>
+    </Radio>
+  </Radio.Group>
+</div>
+
+
+
                 <Button 
                   type="primary" 
                   className="create-button" 
@@ -304,47 +320,95 @@ messageApi.error('请选择模板并输入项目名称');
     },
     {
       key: 'github',
-      label: '从GitHub上拉取',
-      children: (
-        <div className="github-content">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              {!githubConnected ? (
-                <GitHubConnect onConnectSuccess={handleGitHubConnect} />
-              ) : (
-                <>
-                  <CreateRepo onSuccess={() => githubRepoListRef.current?.fetchRepos()} />
-                  <RepoList ref={githubRepoListRef} />
-                </>
-              )}
-            </Col>
-          </Row>
+  label: '从GitHub上拉取',
+  children: (
+     <div className="github-content" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+     
+      {/* GitHub 连接逻辑部分，放到上面 */}
+      <div>
+        {!githubConnected ? (
+          <GitHubConnect onConnectSuccess={handleGitHubConnect} />
+        ) : (
+          <>
+            <CreateRepo onSuccess={() => githubRepoListRef.current?.fetchRepos()} />
+            <RepoList ref={githubRepoListRef} />
+          </>
+        )}
+      </div>
+
+      {/* 公开/隐私部分，放到下面 */}
+      <div className="privacy-options">
+        <Radio.Group value={isPublic} onChange={(e) => setIsPublic(e.target.value)}>
+          <Radio value={true}>
+            <div className="radio-label">
+              公开
+              <div className="icon-container"></div> {/* 新增的容器 */}
+            </div>
+            <div className="radio-description">任何人都可以查看和分支这个项目</div>
+          </Radio>
+          <Radio value={false}>
+            <div className="radio-label">
+              隐私
+              <div className="tubiao"></div>
+            </div>
+            <div className="radio-description">只有您可以查看和编辑这个项目</div>
+          </Radio>
+        </Radio.Group>
+      
+        </div>
         </div>
       ),
     },
     {
-      key: 'gitee',
-      label: '从Gitee上拉取',
-      children: (
-        <div className="gitee-content">
-          {!giteeConnected ? (
-            <GiteeConnect onConnectSuccess={handleGiteeConnect} />
-          ) : (
-            <>
-              <CreateGiteeRepo onSuccess={() => giteeRepoListRef.current?.fetchRepos()} />
-              <GiteeRepoList ref={giteeRepoListRef} />
-            </>
-          )}
+      key: 'gitte',
+  label: '从Gitte上拉取',
+  children: (
+     <div className="github-content" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+     
+      {/* GitHub 连接逻辑部分，放到上面 */}
+      <div>
+        {!githubConnected ? (
+          <GitHubConnect onConnectSuccess={handleGitHubConnect} />
+        ) : (
+          <>
+            <CreateRepo onSuccess={() => githubRepoListRef.current?.fetchRepos()} />
+            <RepoList ref={githubRepoListRef} />
+          </>
+        )}
+      </div>
+
+      {/* 公开/隐私部分，放到下面 */}
+      <div className="privacy-options">
+        <Radio.Group value={isPublic} onChange={(e) => setIsPublic(e.target.value)}>
+          <Radio value={true}>
+            <div className="radio-label">
+              公开
+              <div className="icon-container"></div> {/* 新增的容器 */}
+            </div>
+            <div className="radio-description">任何人都可以查看和分支这个项目</div>
+          </Radio>
+          <Radio value={false}>
+            <div className="radio-label">
+              隐私
+              <div className="tubiao"></div>
+            </div>
+            <div className="radio-description">只有您可以查看和编辑这个项目</div>
+          </Radio>
+        </Radio.Group>
+      
+        </div>
         </div>
       ),
     },
+  
   ];
+  
 
   return (
     <div className='fa-con'>
       <div className='background-home'>
        <div className="home-content dark">
-      <div className="header-search">
+   <div className="header-search">
         <Search 
           placeholder="search for projects" 
           className="search-input"
