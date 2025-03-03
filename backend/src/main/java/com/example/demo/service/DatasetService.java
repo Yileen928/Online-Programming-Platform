@@ -11,4 +11,5 @@ public interface DatasetService {
     void deleteDataset(String id);
     Dataset updateDataset(String id, Dataset dataset);
     List<Dataset> searchDatasets(String keyword);
-} 
+    byte[] downloadDataset(String id);
+}

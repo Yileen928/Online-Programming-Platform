@@ -52,4 +52,17 @@ public class DatasetController {
     public ResponseEntity<?> searchDatasets(@RequestParam String keyword) {
         return ResponseEntity.ok(datasetService.searchDatasets(keyword));
     }
-} 
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<?> downloadDataset(@PathVariable String id) {
+        try {
+            byte[] fileContent = datasetService.downloadDataset(id);
+            return ResponseEntity.ok()
+                    .header("Content-Type", "application/octet-stream")
+                    .header("Content-Disposition", "attachment; filename=dataset-" + id + ".zip")
+                    .body(fileContent);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("下载失败：" + e.getMessage());
+        }
+    }
+}

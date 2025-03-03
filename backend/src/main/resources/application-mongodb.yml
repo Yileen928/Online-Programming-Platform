@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      dataset:
+        uri: mongodb://testusr:123456test@localhost:27017/dataset_db
+        database: dataset_db
+      gridfs:
+        database: dataset_db
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB

@@ -27,7 +27,9 @@ public class Dataset {
     private Long size; // 数据集大小(字节)
     private String format; // 数据格式
     private String status; // 处理状态：PROCESSING, COMPLETED, FAILED
+    private String fileType; // 文件类型扩展名
+    private String fileId; // GridFS中存储的文件ID
 
     // 构造函数、getter和setter方法
     // ... 现有代码 ...
-} 
+}
