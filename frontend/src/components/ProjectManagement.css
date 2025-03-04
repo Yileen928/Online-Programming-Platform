@@ -36,7 +36,8 @@
 
 .project-content {
   padding: 24px;
-  background: #1a1a1a;
+  background: #353434cb;
+  padding-bottom: 450px;
 }
 
 .project-list {
@@ -85,3 +86,30 @@
   color: #666;
   font-size: 12px;
 } 
+.project-list {
+  display: flex
+;
+  flex-direction: column;
+  gap: 55px;
+  margin: 55px;
+  padding: 100px;
+  padding-left: 35px;
+  padding-right: 25px;
+  background-color: #000000;
+  margin-right: 584px;
+  margin-left: 14px;
+  margin-bottom: 0px;
+  border-radius: 24px;
+  padding-bottom: 100px;
+}
+.project-content {
+  padding: 0px;
+  background: #353434cb;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.project-management-layout{
+  margin-left: 200px;
+    margin-bottom: 0px;
+}

@@ -31,6 +31,7 @@ const ProjectManagement = () => {
   ]);
 
   return (
+
     <div className="project-content">
       <div className="project-header">
         <Search 
@@ -44,13 +45,18 @@ const ProjectManagement = () => {
           <Button type="primary" className="new-project-btn">+</Button>
         </div>
       </div>
+      
+     
+     
       <div className="project-list">
         {projects.map(project => (
           <div key={project.key} className="project-item">
             <div className="project-type">{project.type}</div>
+            
             <div className="project-info">
               <h4>{project.name}</h4>
               <p>{project.description}</p>
+          
             </div>
             <div className="project-date">{project.lastModified}</div>
           </div>
