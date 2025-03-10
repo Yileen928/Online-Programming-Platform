@@ -405,10 +405,11 @@ messageApi.error('请选择模板并输入项目名称');
   
 
   return (
-    <div className='fa-con'>
+    
       <div className='background-home'>
        <div className="home-content dark">
    <div className="header-search">
+    
         <Search 
           placeholder="search for projects" 
           className="search-input"
@@ -424,7 +425,7 @@ messageApi.error('请选择模板并输入项目名称');
             <Avatar src="https://xsgames.co/randomusers/avatar.php?g=female&n=1" />
             <Avatar src="https://xsgames.co/randomusers/avatar.php?g=male&n=2" />
           </Avatar.Group>
-        </div>
+        
       </div>
       
       <Tabs items={items} />
